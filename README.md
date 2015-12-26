@@ -18,3 +18,17 @@ Art Hackathon 2015
 /location_x/date_type/location_y
 ### Values
 "318.3",2,"154.3"
+
+## 3 加速度 Gyro
+
+### Pattern 
+/gyro_x/gyro_y/gyro_z/date_type
+### Values
+"0.03","-0.02","0.02",3
+
+## 4 角度 Attitude
+
+### Pattern 
+/attitude_roll/attitude_pitch/attitude_yaw/date_type
+### Values
+"20.43","-30.02","102.00",4
