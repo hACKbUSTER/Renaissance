@@ -13,21 +13,47 @@
 
 @import SceneKit;
 
-double radians(float degrees) {
-    return ( degrees * 3.14159265 ) / 180.0;
-}
-
 @interface ViewController ()
 {
+    /**
+     *  相机node
+     */
     SCNNode *cameraNode;
+    
+    /**
+     *  当前速度，需要转化为位移量
+     */
     CGFloat speed;
+    
+    /**
+     *  整体的node
+     */
     SCNNode *geometryNode;
+    
+    /**
+     *  全速前进？是否需要
+     */
     BOOL fullSpeedMode;
+    
+    /**
+     *  刷新frame的timer
+     */
     NSTimer * frameUpateTimer;
     
+    /**
+     *  osc协议发送数据包的timer
+     */
     NSTimer * oscTransmitTimer;
+    /**
+     *  区域编号
+     */
     NSInteger areaId;
+    /**
+     *  天气编号
+     */
     NSInteger weather;
+    
+    BOOL hasReturnZero;
 }
 
 @property (nonatomic,strong) SCNView *sceneKitView;
@@ -46,9 +72,10 @@ double radians(float degrees) {
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    speed = 0.0f;
+    speed = 0.1f;
     areaId = 1;
     fullSpeedMode = NO;
+    hasReturnZero = NO;
     
     [[OSCManager sharedInstance] setAddress:@"169.254.172.171"];
     [[OSCManager sharedInstance] setPort:7400];
@@ -77,16 +104,15 @@ double radians(float degrees) {
     
     cameraNode.camera.zNear = 0.001;
     cameraNode.camera.zFar = 99999999;
-    cameraNode.camera.yFov = 60.0;
+    cameraNode.camera.yFov = 100.0;
     cameraNode.camera.xFov = 60.0;
     
     allNodeArray = [NSMutableArray array];
-    for (int i = 0; i < 1000; i++)
+    for (int i = 0; i < 100; i++)
     {
         NSMutableArray *nodeArray = [NSMutableArray array];
         for (int k = 0; k < 3; k ++)
         {
-            //NSLog(@"NUMBER %d",i);
             SCNBox *sceneKitBox = [SCNBox boxWithWidth:15 height:(arc4random()%100 + 10) length:15 chamferRadius:0.0f];
             SCNNode *boxNode = [SCNNode nodeWithGeometry:sceneKitBox];
             
@@ -132,6 +158,9 @@ double radians(float degrees) {
     [self.view addGestureRecognizer:tap];
     
     [self initMotionManager];
+    
+    NSDictionary *dict = [NSDictionary dictionaryWithObjects:@[@(0),@(0),@(0),@(0),@(0),@0] forKeys:@[@"max_height",@"min_height",@"speed",@"area_id",@"weather",@"data_type"]];
+    [[OSCManager sharedInstance] sendPacketWithDictionary:dict];
     // Do any additional setup after loading the view, typically from a nib.
 }
 
@@ -143,10 +172,6 @@ double radians(float degrees) {
         UITouch *touch = [touches allObjects].firstObject;
         if(touch.phase == UITouchPhaseMoved)
         {
-//            CGPoint now = [touch locationInView:(SCNView *)self.view];
-//            CGPoint prev = [touch previousLocationInView:(SCNView *)self.view];
-//            CGFloat translation_y = now.y - prev.y;
-//            NSLog(@"change in y :%f",translation_y);
             CGPoint now = [touch locationInView:(SCNView *)self.view];
             CGPoint prev = [touch previousLocationInView:(SCNView *)self.view];
             CGFloat translation_y = now.y - prev.y;
@@ -212,7 +237,7 @@ double radians(float degrees) {
 
 - (void)frameUpdate:(id)sender
 {
-    geometryNode.position = SCNVector3Make(geometryNode.position.x,geometryNode.position.y,geometryNode.position.z + speed * 1.5f);
+    geometryNode.position = SCNVector3Make(geometryNode.position.x,geometryNode.position.y,geometryNode.position.z + speed * 1.0f);
     
 }
 
@@ -238,7 +263,7 @@ double radians(float degrees) {
 {
     if (nodeCount == allNodeArray.count)
     {
-        [timer invalidate];
+        [oscTransmitTimer invalidate];
         nodeCount = 0;
     }
     else
@@ -261,12 +286,24 @@ double radians(float degrees) {
                 minHeight = height;
         }
         
-        if(speed <= 0.9f)
+        if(nodeCount < allNodeArray.count - 50 && speed <= 1.0f)
         {
             speed = speed + 0.0005 * nodeCount;
         }
         
-        NSDictionary *dict = [NSDictionary dictionaryWithObjects:@[@(maxHeight),@(minHeight),@(speed),@(areaId),@(1),@5] forKeys:@[@"max_height",@"min_height",@"speed",@"area_id",@"weather",@"data_type"]];
+        if(nodeCount >= allNodeArray.count - 50 && speed >= 0.0f)
+        {
+            speed = speed - 0.0005 * (allNodeArray.count - nodeCount);
+        }
+        
+        NSInteger area_id = areaId;
+        if(!hasReturnZero)
+        {
+            hasReturnZero = YES;
+            area_id = 0;
+        }
+            
+        NSDictionary *dict = [NSDictionary dictionaryWithObjects:@[@(maxHeight),@(minHeight),@(speed),@(area_id),@(1),@5] forKeys:@[@"max_height",@"min_height",@"speed",@"area_id",@"weather",@"data_type"]];
         [[OSCManager sharedInstance] sendPacketWithDictionary:dict];
     }
 }
@@ -283,11 +320,11 @@ double radians(float degrees) {
             }
         }
         [timer invalidate];
+        [frameUpateTimer invalidate];
         nodeCount = 0;
     }else
     {
         NSMutableArray *nodeArray = [allNodeArray objectAtIndex:nodeCount];
-        NSLog(@"%lu",(unsigned long)nodeArray.count);
         for (SCNNode * node in nodeArray)
         {
             SCNVector3 SCNPosition = node.position;

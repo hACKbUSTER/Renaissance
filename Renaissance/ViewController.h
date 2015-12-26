@@ -8,8 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
+double radians(float degrees) {
+    return ( degrees * 3.14159265 ) / 180.0;
+}
 
+@interface ViewController : UIViewController
 
 @end
 
