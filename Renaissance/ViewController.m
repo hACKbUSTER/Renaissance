@@ -56,6 +56,9 @@ double radians(float degrees) {
     sceneKitView.autoenablesDefaultLighting = YES;
     sceneKitView.showsStatistics = YES;
     
+    sceneKitView.debugOptions = SCNDebugOptionShowWireframe;
+    
+    
     cameraNode = [SCNNode node];
     cameraNode.camera = [SCNCamera camera];
     cameraNode.position = SCNVector3Make(0, 150, 150);
@@ -93,11 +96,14 @@ double radians(float degrees) {
     
     mat.diffuse.contents = [self imageWithView:view];
     
-    SCNFloor *floor = [SCNFloor floor];
-    floor.reflectivity = 0.0f;
+    SCNPlane *floor = [SCNPlane planeWithWidth:10000 height:10000];
+    floor.widthSegmentCount = 100;
+    floor.heightSegmentCount = 100;
+    //floor.reflectivity = 0.0f;
     floor.materials = @[mat];
     
     SCNNode *floorNode = [SCNNode nodeWithGeometry:floor];
+    floorNode.eulerAngles = SCNVector3Make(radians(-90), 0, 0);
     
     [geometryNode addChildNode:floorNode];
     //geometryNode.transform = SCNMatrix4MakeRotation(radians(0.0f),1,0,0);
