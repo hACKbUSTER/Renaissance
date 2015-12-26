@@ -20,10 +20,14 @@ double radians(float degrees) {
 @interface ViewController ()
 {
     SCNNode *cameraNode;
-    CGFloat angle;
+    CGFloat speed;
     SCNNode *geometryNode;
     BOOL fullSpeedMode;
     NSTimer * frameUpateTimer;
+    
+    NSTimer * oscTransmitTimer;
+    NSInteger areaId;
+    NSInteger weather;
 }
 
 @property (nonatomic,strong) SCNView *sceneKitView;
@@ -42,7 +46,8 @@ double radians(float degrees) {
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    angle = 0.0f;
+    speed = 0.0f;
+    areaId = 1;
     fullSpeedMode = NO;
     
     [[OSCManager sharedInstance] setAddress:@"169.254.172.171"];
@@ -76,7 +81,7 @@ double radians(float degrees) {
     cameraNode.camera.xFov = 60.0;
     
     allNodeArray = [NSMutableArray array];
-    for (int i = 0; i < 100; i++)
+    for (int i = 0; i < 1000; i++)
     {
         NSMutableArray *nodeArray = [NSMutableArray array];
         for (int k = 0; k < 3; k ++)
@@ -85,9 +90,11 @@ double radians(float degrees) {
             SCNBox *sceneKitBox = [SCNBox boxWithWidth:15 height:(arc4random()%100 + 10) length:15 chamferRadius:0.0f];
             SCNNode *boxNode = [SCNNode nodeWithGeometry:sceneKitBox];
             
+            boxNode.hidden = YES;
+            
             CGFloat nextX = (k-1) * 40 + -50.0f + arc4random()% (k * 40);
 
-            boxNode.position = SCNVector3Make(nextX,-sceneKitBox.height - 10, -i*25);
+            boxNode.position = SCNVector3Make(nextX,-sceneKitBox.height - 10, -i*50);
             [geometryNode addChildNode:boxNode];
             [nodeArray addObject:boxNode];
         }
@@ -117,8 +124,9 @@ double radians(float degrees) {
     [sceneKitView.scene.rootNode addChildNode:geometryNode];
     
     nodeCount = 0;
-    timer=[NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(buildingLevelUp) userInfo:nil repeats:YES];
+    timer=[NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(buildingLevelUp) userInfo:nil repeats:YES];
     frameUpateTimer = [NSTimer scheduledTimerWithTimeInterval:1.0f/60.0f target:self selector:@selector(frameUpdate:) userInfo:nil repeats:YES];
+    oscTransmitTimer = [NSTimer scheduledTimerWithTimeInterval:1.0f/15.0f target:self selector:@selector(uploadData:) userInfo:nil repeats:YES];
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapEvent:)];
     [self.view addGestureRecognizer:tap];
@@ -172,7 +180,7 @@ double radians(float degrees) {
              double yaw = CC_RADIANS_TO_DEGREES(motion.attitude.yaw);
              //NSLog(@"roll : %.2f pitch : %.2f yaw : %.2f",roll,pitch,yaw);
              NSDictionary *motionAttitudeDict = [NSDictionary dictionaryWithObjects:@[[NSString stringWithFormat:@"%.2f",roll],[NSString stringWithFormat:@"%.2f",pitch],[NSString stringWithFormat:@"%.2f",yaw],@4] forKeys:@[@"attitude_roll",@"attitude_pitch",@"attitude_yaw",@"date_type"]];
-             [[OSCManager sharedInstance] sendPacketWithDictionary:motionAttitudeDict];
+             //[[OSCManager sharedInstance] sendPacketWithDictionary:motionAttitudeDict];
          }];
     }
     else
@@ -192,7 +200,7 @@ double radians(float degrees) {
                  double y = gyroData.rotationRate.y;
                  double z = gyroData.rotationRate.z;
                  NSDictionary *motionGyroDict = [NSDictionary dictionaryWithObjects:@[[NSString stringWithFormat:@"%.2f",x],[NSString stringWithFormat:@"%.2f",y],[NSString stringWithFormat:@"%.2f",z],@3] forKeys:@[@"gyro_x",@"gyro_y",@"gyro_z",@"date_type"]];
-                 [[OSCManager sharedInstance] sendPacketWithDictionary:motionGyroDict];
+                 //[[OSCManager sharedInstance] sendPacketWithDictionary:motionGyroDict];
              }];
         }
     }
@@ -204,7 +212,8 @@ double radians(float degrees) {
 
 - (void)frameUpdate:(id)sender
 {
-    geometryNode.position = SCNVector3Make(geometryNode.position.x,geometryNode.position.y,geometryNode.position.z + 0.8f);
+    geometryNode.position = SCNVector3Make(geometryNode.position.x,geometryNode.position.y,geometryNode.position.z + speed * 1.5f);
+    
 }
 
 - (void)tapEvent:(id)sender
@@ -225,34 +234,69 @@ double radians(float degrees) {
     [[OSCManager sharedInstance] sendPacketWithDictionary:dict];
 }
 
-- (void)buildingLevelUp
+- (void)uploadData:(id)sender
 {
     if (nodeCount == allNodeArray.count)
     {
         [timer invalidate];
         nodeCount = 0;
+    }
+    else
+    {
+        NSMutableArray *nodeArray = [allNodeArray objectAtIndex:nodeCount];
+        NSLog(@"%lu",(unsigned long)nodeArray.count);
+        
+        CGFloat maxHeight = 0.0f;
+        SCNNode *t_node = nodeArray.firstObject;
+        CGFloat minHeight = [(SCNBox *)t_node.geometry height];
+        
+        for (SCNNode * node in nodeArray)
+        {
+            CGFloat height = [(SCNBox *)node.geometry height];
+            
+            if(height >= maxHeight)
+                maxHeight = height;
+            
+            if(height <= minHeight)
+                minHeight = height;
+        }
+        
+        if(speed <= 0.9f)
+        {
+            speed = speed + 0.0005 * nodeCount;
+        }
+        
+        NSDictionary *dict = [NSDictionary dictionaryWithObjects:@[@(maxHeight),@(minHeight),@(speed),@(areaId),@(1),@5] forKeys:@[@"max_height",@"min_height",@"speed",@"area_id",@"weather",@"data_type"]];
+        [[OSCManager sharedInstance] sendPacketWithDictionary:dict];
+    }
+}
+
+- (void)buildingLevelUp
+{
+    if (nodeCount == allNodeArray.count)
+    {
+        for(NSArray *array in allNodeArray)
+        {
+            for(SCNNode *node in array)
+            {
+                [node removeFromParentNode];
+            }
+        }
+        [timer invalidate];
+        nodeCount = 0;
     }else
     {
-//        CABasicAnimation *positionAnimation = [CABasicAnimation animationWithKeyPath:@"position.z"];
-//        positionAnimation.toValue = [NSNumber numberWithFloat:geometryNode.position.z - 30.0f];
-//        positionAnimation.duration = 1.0;
-//        positionAnimation.removedOnCompletion = NO;
-//        positionAnimation.autoreverses = NO;
-//        positionAnimation.repeatCount = 1;
-//        positionAnimation.fillMode = kCAFillModeForwards;
-//        [CATransaction setCompletionBlock:^
-//         {
-//             //node.position = NewSCNPosition;
-//         }];
-//        [geometryNode addAnimation:positionAnimation forKey:@"position.z"];
-//        [CATransaction commit];
-
         NSMutableArray *nodeArray = [allNodeArray objectAtIndex:nodeCount];
         NSLog(@"%lu",(unsigned long)nodeArray.count);
         for (SCNNode * node in nodeArray)
         {
             SCNVector3 SCNPosition = node.position;
-            SCNVector3 NewSCNPosition = SCNVector3Make(SCNPosition.x, SCNPosition.y, -SCNPosition.z);
+            if(SCNPosition.y >= 0)
+            {
+                continue;
+            }
+            
+            node.hidden = NO;
             
             [CATransaction begin];
             CABasicAnimation *positionAnimation = [CABasicAnimation animationWithKeyPath:@"position.y"];
