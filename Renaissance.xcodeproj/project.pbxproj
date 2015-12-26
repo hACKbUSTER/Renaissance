@@ -1,0 +1,747 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		500897F81C2E9D85009B3D42 /* libSocketRocket.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 500897F71C2E9D85009B3D42 /* libSocketRocket.a */; };
+		500897FD1C2EA2E7009B3D42 /* OSCManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 500897FC1C2EA2E7009B3D42 /* OSCManager.m */; };
+		507A5F6F1C2E8D2A0046433F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 507A5F6E1C2E8D2A0046433F /* main.m */; };
+		507A5F721C2E8D2A0046433F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 507A5F711C2E8D2A0046433F /* AppDelegate.m */; };
+		507A5F751C2E8D2A0046433F /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 507A5F741C2E8D2A0046433F /* ViewController.m */; };
+		507A5F781C2E8D2A0046433F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 507A5F761C2E8D2A0046433F /* Main.storyboard */; };
+		507A5F7A1C2E8D2A0046433F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 507A5F791C2E8D2A0046433F /* Assets.xcassets */; };
+		507A5F7D1C2E8D2A0046433F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 507A5F7B1C2E8D2A0046433F /* LaunchScreen.storyboard */; };
+		507A5F881C2E8D2A0046433F /* RenaissanceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 507A5F871C2E8D2A0046433F /* RenaissanceTests.m */; };
+		507A5F931C2E8D2A0046433F /* RenaissanceUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 507A5F921C2E8D2A0046433F /* RenaissanceUITests.m */; };
+		507A5FF41C2E97E90046433F /* F53OSCBundle.m in Sources */ = {isa = PBXBuildFile; fileRef = 507A5FD41C2E97E90046433F /* F53OSCBundle.m */; };
+		507A5FF51C2E97E90046433F /* F53OSCClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 507A5FD61C2E97E90046433F /* F53OSCClient.m */; };
+		507A5FF61C2E97E90046433F /* F53OSCMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 507A5FD91C2E97E90046433F /* F53OSCMessage.m */; };
+		507A5FF71C2E97E90046433F /* F53OSCPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = 507A5FDB1C2E97E90046433F /* F53OSCPacket.m */; };
+		507A5FF81C2E97E90046433F /* F53OSCParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 507A5FDD1C2E97E90046433F /* F53OSCParser.m */; };
+		507A5FF91C2E97E90046433F /* F53OSCServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 507A5FE01C2E97E90046433F /* F53OSCServer.m */; };
+		507A5FFA1C2E97E90046433F /* F53OSCSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 507A5FE21C2E97E90046433F /* F53OSCSocket.m */; };
+		507A5FFB1C2E97E90046433F /* F53OSCTimeTag.m in Sources */ = {isa = PBXBuildFile; fileRef = 507A5FE41C2E97E90046433F /* F53OSCTimeTag.m */; };
+		507A5FFC1C2E97E90046433F /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 507A5FE61C2E97E90046433F /* GCDAsyncSocket.m */; };
+		507A5FFD1C2E97E90046433F /* GCDAsyncUdpSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 507A5FE81C2E97E90046433F /* GCDAsyncUdpSocket.m */; };
+		507A5FFE1C2E97E90046433F /* LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = 507A5FE91C2E97E90046433F /* LICENSE.txt */; };
+		507A5FFF1C2E97E90046433F /* MetatoneNetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 507A5FEB1C2E97E90046433F /* MetatoneNetworkManager.m */; };
+		507A60001C2E97E90046433F /* NSData+F53OSCBlob.m in Sources */ = {isa = PBXBuildFile; fileRef = 507A5FED1C2E97E90046433F /* NSData+F53OSCBlob.m */; };
+		507A60011C2E97E90046433F /* NSDate+F53OSCTimeTag.m in Sources */ = {isa = PBXBuildFile; fileRef = 507A5FEF1C2E97E90046433F /* NSDate+F53OSCTimeTag.m */; };
+		507A60021C2E97E90046433F /* NSNumber+F53OSCNumber.m in Sources */ = {isa = PBXBuildFile; fileRef = 507A5FF11C2E97E90046433F /* NSNumber+F53OSCNumber.m */; };
+		507A60031C2E97E90046433F /* NSString+F53OSCString.m in Sources */ = {isa = PBXBuildFile; fileRef = 507A5FF31C2E97E90046433F /* NSString+F53OSCString.m */; };
+		507A600B1C2E9BD60046433F /* libicucore.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 507A600A1C2E9BD60046433F /* libicucore.tbd */; };
+		51DF52D0A179C64C1B4C49BA /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A7E010FAE6CA1A2D474D8160 /* libPods.a */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		507A5F841C2E8D2A0046433F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 507A5F621C2E8D2A0046433F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 507A5F691C2E8D2A0046433F;
+			remoteInfo = Renaissance;
+		};
+		507A5F8F1C2E8D2A0046433F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 507A5F621C2E8D2A0046433F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 507A5F691C2E8D2A0046433F;
+			remoteInfo = Renaissance;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		500897F71C2E9D85009B3D42 /* libSocketRocket.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSocketRocket.a; path = "Pods/../build/Debug-iphoneos/libSocketRocket.a"; sourceTree = "<group>"; };
+		500897FB1C2EA2E7009B3D42 /* OSCManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OSCManager.h; sourceTree = "<group>"; };
+		500897FC1C2EA2E7009B3D42 /* OSCManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OSCManager.m; sourceTree = "<group>"; };
+		507A5F6A1C2E8D2A0046433F /* Renaissance.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Renaissance.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		507A5F6E1C2E8D2A0046433F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		507A5F701C2E8D2A0046433F /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		507A5F711C2E8D2A0046433F /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		507A5F731C2E8D2A0046433F /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		507A5F741C2E8D2A0046433F /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		507A5F771C2E8D2A0046433F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		507A5F791C2E8D2A0046433F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		507A5F7C1C2E8D2A0046433F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		507A5F7E1C2E8D2A0046433F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		507A5F831C2E8D2A0046433F /* RenaissanceTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RenaissanceTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		507A5F871C2E8D2A0046433F /* RenaissanceTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RenaissanceTests.m; sourceTree = "<group>"; };
+		507A5F891C2E8D2A0046433F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		507A5F8E1C2E8D2A0046433F /* RenaissanceUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RenaissanceUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		507A5F921C2E8D2A0046433F /* RenaissanceUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RenaissanceUITests.m; sourceTree = "<group>"; };
+		507A5F941C2E8D2A0046433F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		507A5FD21C2E97E90046433F /* F53OSC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = F53OSC.h; sourceTree = "<group>"; };
+		507A5FD31C2E97E90046433F /* F53OSCBundle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = F53OSCBundle.h; sourceTree = "<group>"; };
+		507A5FD41C2E97E90046433F /* F53OSCBundle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = F53OSCBundle.m; sourceTree = "<group>"; };
+		507A5FD51C2E97E90046433F /* F53OSCClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = F53OSCClient.h; sourceTree = "<group>"; };
+		507A5FD61C2E97E90046433F /* F53OSCClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = F53OSCClient.m; sourceTree = "<group>"; };
+		507A5FD71C2E97E90046433F /* F53OSCFoundationAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = F53OSCFoundationAdditions.h; sourceTree = "<group>"; };
+		507A5FD81C2E97E90046433F /* F53OSCMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = F53OSCMessage.h; sourceTree = "<group>"; };
+		507A5FD91C2E97E90046433F /* F53OSCMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = F53OSCMessage.m; sourceTree = "<group>"; };
+		507A5FDA1C2E97E90046433F /* F53OSCPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = F53OSCPacket.h; sourceTree = "<group>"; };
+		507A5FDB1C2E97E90046433F /* F53OSCPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = F53OSCPacket.m; sourceTree = "<group>"; };
+		507A5FDC1C2E97E90046433F /* F53OSCParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = F53OSCParser.h; sourceTree = "<group>"; };
+		507A5FDD1C2E97E90046433F /* F53OSCParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = F53OSCParser.m; sourceTree = "<group>"; };
+		507A5FDE1C2E97E90046433F /* F53OSCProtocols.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = F53OSCProtocols.h; sourceTree = "<group>"; };
+		507A5FDF1C2E97E90046433F /* F53OSCServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = F53OSCServer.h; sourceTree = "<group>"; };
+		507A5FE01C2E97E90046433F /* F53OSCServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = F53OSCServer.m; sourceTree = "<group>"; };
+		507A5FE11C2E97E90046433F /* F53OSCSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = F53OSCSocket.h; sourceTree = "<group>"; };
+		507A5FE21C2E97E90046433F /* F53OSCSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = F53OSCSocket.m; sourceTree = "<group>"; };
+		507A5FE31C2E97E90046433F /* F53OSCTimeTag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = F53OSCTimeTag.h; sourceTree = "<group>"; };
+		507A5FE41C2E97E90046433F /* F53OSCTimeTag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = F53OSCTimeTag.m; sourceTree = "<group>"; };
+		507A5FE51C2E97E90046433F /* GCDAsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDAsyncSocket.h; sourceTree = "<group>"; };
+		507A5FE61C2E97E90046433F /* GCDAsyncSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCDAsyncSocket.m; sourceTree = "<group>"; };
+		507A5FE71C2E97E90046433F /* GCDAsyncUdpSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDAsyncUdpSocket.h; sourceTree = "<group>"; };
+		507A5FE81C2E97E90046433F /* GCDAsyncUdpSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCDAsyncUdpSocket.m; sourceTree = "<group>"; };
+		507A5FE91C2E97E90046433F /* LICENSE.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
+		507A5FEA1C2E97E90046433F /* MetatoneNetworkManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MetatoneNetworkManager.h; sourceTree = "<group>"; };
+		507A5FEB1C2E97E90046433F /* MetatoneNetworkManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MetatoneNetworkManager.m; sourceTree = "<group>"; };
+		507A5FEC1C2E97E90046433F /* NSData+F53OSCBlob.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+F53OSCBlob.h"; sourceTree = "<group>"; };
+		507A5FED1C2E97E90046433F /* NSData+F53OSCBlob.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+F53OSCBlob.m"; sourceTree = "<group>"; };
+		507A5FEE1C2E97E90046433F /* NSDate+F53OSCTimeTag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+F53OSCTimeTag.h"; sourceTree = "<group>"; };
+		507A5FEF1C2E97E90046433F /* NSDate+F53OSCTimeTag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+F53OSCTimeTag.m"; sourceTree = "<group>"; };
+		507A5FF01C2E97E90046433F /* NSNumber+F53OSCNumber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSNumber+F53OSCNumber.h"; sourceTree = "<group>"; };
+		507A5FF11C2E97E90046433F /* NSNumber+F53OSCNumber.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSNumber+F53OSCNumber.m"; sourceTree = "<group>"; };
+		507A5FF21C2E97E90046433F /* NSString+F53OSCString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+F53OSCString.h"; sourceTree = "<group>"; };
+		507A5FF31C2E97E90046433F /* NSString+F53OSCString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+F53OSCString.m"; sourceTree = "<group>"; };
+		507A600A1C2E9BD60046433F /* libicucore.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libicucore.tbd; path = usr/lib/libicucore.tbd; sourceTree = SDKROOT; };
+		89ADCAB85BFAB9767AC5A8C6 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		A7E010FAE6CA1A2D474D8160 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		CB4694CE9D547FCAAC1FA21B /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		507A5F671C2E8D2A0046433F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				507A600B1C2E9BD60046433F /* libicucore.tbd in Frameworks */,
+				500897F81C2E9D85009B3D42 /* libSocketRocket.a in Frameworks */,
+				51DF52D0A179C64C1B4C49BA /* libPods.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		507A5F801C2E8D2A0046433F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		507A5F8B1C2E8D2A0046433F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		04F432677581E8230B357649 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				CB4694CE9D547FCAAC1FA21B /* Pods.debug.xcconfig */,
+				89ADCAB85BFAB9767AC5A8C6 /* Pods.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		500897F91C2EA1B6009B3D42 /* Framework */ = {
+			isa = PBXGroup;
+			children = (
+				507A600A1C2E9BD60046433F /* libicucore.tbd */,
+			);
+			name = Framework;
+			sourceTree = "<group>";
+		};
+		500897FA1C2EA1F1009B3D42 /* OSCManager */ = {
+			isa = PBXGroup;
+			children = (
+				500897FB1C2EA2E7009B3D42 /* OSCManager.h */,
+				500897FC1C2EA2E7009B3D42 /* OSCManager.m */,
+			);
+			name = OSCManager;
+			sourceTree = "<group>";
+		};
+		507A5F611C2E8D2A0046433F = {
+			isa = PBXGroup;
+			children = (
+				507A5F6C1C2E8D2A0046433F /* Renaissance */,
+				507A5F861C2E8D2A0046433F /* RenaissanceTests */,
+				507A5F911C2E8D2A0046433F /* RenaissanceUITests */,
+				507A5F6B1C2E8D2A0046433F /* Products */,
+				04F432677581E8230B357649 /* Pods */,
+				CECC091801D7C22B04F6DE58 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		507A5F6B1C2E8D2A0046433F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				507A5F6A1C2E8D2A0046433F /* Renaissance.app */,
+				507A5F831C2E8D2A0046433F /* RenaissanceTests.xctest */,
+				507A5F8E1C2E8D2A0046433F /* RenaissanceUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		507A5F6C1C2E8D2A0046433F /* Renaissance */ = {
+			isa = PBXGroup;
+			children = (
+				500897FA1C2EA1F1009B3D42 /* OSCManager */,
+				500897F91C2EA1B6009B3D42 /* Framework */,
+				507A5FA01C2E95DD0046433F /* OSC */,
+				507A5F701C2E8D2A0046433F /* AppDelegate.h */,
+				507A5F711C2E8D2A0046433F /* AppDelegate.m */,
+				507A5F731C2E8D2A0046433F /* ViewController.h */,
+				507A5F741C2E8D2A0046433F /* ViewController.m */,
+				507A5F761C2E8D2A0046433F /* Main.storyboard */,
+				507A5F791C2E8D2A0046433F /* Assets.xcassets */,
+				507A5F7B1C2E8D2A0046433F /* LaunchScreen.storyboard */,
+				507A5F7E1C2E8D2A0046433F /* Info.plist */,
+				507A5F6D1C2E8D2A0046433F /* Supporting Files */,
+			);
+			path = Renaissance;
+			sourceTree = "<group>";
+		};
+		507A5F6D1C2E8D2A0046433F /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				507A5F6E1C2E8D2A0046433F /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		507A5F861C2E8D2A0046433F /* RenaissanceTests */ = {
+			isa = PBXGroup;
+			children = (
+				507A5F871C2E8D2A0046433F /* RenaissanceTests.m */,
+				507A5F891C2E8D2A0046433F /* Info.plist */,
+			);
+			path = RenaissanceTests;
+			sourceTree = "<group>";
+		};
+		507A5F911C2E8D2A0046433F /* RenaissanceUITests */ = {
+			isa = PBXGroup;
+			children = (
+				507A5F921C2E8D2A0046433F /* RenaissanceUITests.m */,
+				507A5F941C2E8D2A0046433F /* Info.plist */,
+			);
+			path = RenaissanceUITests;
+			sourceTree = "<group>";
+		};
+		507A5FA01C2E95DD0046433F /* OSC */ = {
+			isa = PBXGroup;
+			children = (
+				507A5FD21C2E97E90046433F /* F53OSC.h */,
+				507A5FD31C2E97E90046433F /* F53OSCBundle.h */,
+				507A5FD41C2E97E90046433F /* F53OSCBundle.m */,
+				507A5FD51C2E97E90046433F /* F53OSCClient.h */,
+				507A5FD61C2E97E90046433F /* F53OSCClient.m */,
+				507A5FD71C2E97E90046433F /* F53OSCFoundationAdditions.h */,
+				507A5FD81C2E97E90046433F /* F53OSCMessage.h */,
+				507A5FD91C2E97E90046433F /* F53OSCMessage.m */,
+				507A5FDA1C2E97E90046433F /* F53OSCPacket.h */,
+				507A5FDB1C2E97E90046433F /* F53OSCPacket.m */,
+				507A5FDC1C2E97E90046433F /* F53OSCParser.h */,
+				507A5FDD1C2E97E90046433F /* F53OSCParser.m */,
+				507A5FDE1C2E97E90046433F /* F53OSCProtocols.h */,
+				507A5FDF1C2E97E90046433F /* F53OSCServer.h */,
+				507A5FE01C2E97E90046433F /* F53OSCServer.m */,
+				507A5FE11C2E97E90046433F /* F53OSCSocket.h */,
+				507A5FE21C2E97E90046433F /* F53OSCSocket.m */,
+				507A5FE31C2E97E90046433F /* F53OSCTimeTag.h */,
+				507A5FE41C2E97E90046433F /* F53OSCTimeTag.m */,
+				507A5FE51C2E97E90046433F /* GCDAsyncSocket.h */,
+				507A5FE61C2E97E90046433F /* GCDAsyncSocket.m */,
+				507A5FE71C2E97E90046433F /* GCDAsyncUdpSocket.h */,
+				507A5FE81C2E97E90046433F /* GCDAsyncUdpSocket.m */,
+				507A5FE91C2E97E90046433F /* LICENSE.txt */,
+				507A5FEA1C2E97E90046433F /* MetatoneNetworkManager.h */,
+				507A5FEB1C2E97E90046433F /* MetatoneNetworkManager.m */,
+				507A5FEC1C2E97E90046433F /* NSData+F53OSCBlob.h */,
+				507A5FED1C2E97E90046433F /* NSData+F53OSCBlob.m */,
+				507A5FEE1C2E97E90046433F /* NSDate+F53OSCTimeTag.h */,
+				507A5FEF1C2E97E90046433F /* NSDate+F53OSCTimeTag.m */,
+				507A5FF01C2E97E90046433F /* NSNumber+F53OSCNumber.h */,
+				507A5FF11C2E97E90046433F /* NSNumber+F53OSCNumber.m */,
+				507A5FF21C2E97E90046433F /* NSString+F53OSCString.h */,
+				507A5FF31C2E97E90046433F /* NSString+F53OSCString.m */,
+			);
+			name = OSC;
+			sourceTree = "<group>";
+		};
+		CECC091801D7C22B04F6DE58 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				500897F71C2E9D85009B3D42 /* libSocketRocket.a */,
+				A7E010FAE6CA1A2D474D8160 /* libPods.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		507A5F691C2E8D2A0046433F /* Renaissance */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 507A5F971C2E8D2A0046433F /* Build configuration list for PBXNativeTarget "Renaissance" */;
+			buildPhases = (
+				B7452F54F2B1F0D61C966228 /* Check Pods Manifest.lock */,
+				507A5F661C2E8D2A0046433F /* Sources */,
+				507A5F671C2E8D2A0046433F /* Frameworks */,
+				507A5F681C2E8D2A0046433F /* Resources */,
+				A5B1A82DC1407E419567DBE8 /* Embed Pods Frameworks */,
+				2AE8E829538B5CF8CD1820AA /* Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Renaissance;
+			productName = Renaissance;
+			productReference = 507A5F6A1C2E8D2A0046433F /* Renaissance.app */;
+			productType = "com.apple.product-type.application";
+		};
+		507A5F821C2E8D2A0046433F /* RenaissanceTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 507A5F9A1C2E8D2A0046433F /* Build configuration list for PBXNativeTarget "RenaissanceTests" */;
+			buildPhases = (
+				507A5F7F1C2E8D2A0046433F /* Sources */,
+				507A5F801C2E8D2A0046433F /* Frameworks */,
+				507A5F811C2E8D2A0046433F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				507A5F851C2E8D2A0046433F /* PBXTargetDependency */,
+			);
+			name = RenaissanceTests;
+			productName = RenaissanceTests;
+			productReference = 507A5F831C2E8D2A0046433F /* RenaissanceTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		507A5F8D1C2E8D2A0046433F /* RenaissanceUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 507A5F9D1C2E8D2A0046433F /* Build configuration list for PBXNativeTarget "RenaissanceUITests" */;
+			buildPhases = (
+				507A5F8A1C2E8D2A0046433F /* Sources */,
+				507A5F8B1C2E8D2A0046433F /* Frameworks */,
+				507A5F8C1C2E8D2A0046433F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				507A5F901C2E8D2A0046433F /* PBXTargetDependency */,
+			);
+			name = RenaissanceUITests;
+			productName = RenaissanceUITests;
+			productReference = 507A5F8E1C2E8D2A0046433F /* RenaissanceUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		507A5F621C2E8D2A0046433F /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0710;
+				ORGANIZATIONNAME = "叔 陈";
+				TargetAttributes = {
+					507A5F691C2E8D2A0046433F = {
+						CreatedOnToolsVersion = 7.1.1;
+					};
+					507A5F821C2E8D2A0046433F = {
+						CreatedOnToolsVersion = 7.1.1;
+						TestTargetID = 507A5F691C2E8D2A0046433F;
+					};
+					507A5F8D1C2E8D2A0046433F = {
+						CreatedOnToolsVersion = 7.1.1;
+						TestTargetID = 507A5F691C2E8D2A0046433F;
+					};
+				};
+			};
+			buildConfigurationList = 507A5F651C2E8D2A0046433F /* Build configuration list for PBXProject "Renaissance" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 507A5F611C2E8D2A0046433F;
+			productRefGroup = 507A5F6B1C2E8D2A0046433F /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				507A5F691C2E8D2A0046433F /* Renaissance */,
+				507A5F821C2E8D2A0046433F /* RenaissanceTests */,
+				507A5F8D1C2E8D2A0046433F /* RenaissanceUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		507A5F681C2E8D2A0046433F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				507A5FFE1C2E97E90046433F /* LICENSE.txt in Resources */,
+				507A5F7D1C2E8D2A0046433F /* LaunchScreen.storyboard in Resources */,
+				507A5F7A1C2E8D2A0046433F /* Assets.xcassets in Resources */,
+				507A5F781C2E8D2A0046433F /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		507A5F811C2E8D2A0046433F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		507A5F8C1C2E8D2A0046433F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		2AE8E829538B5CF8CD1820AA /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A5B1A82DC1407E419567DBE8 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B7452F54F2B1F0D61C966228 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		507A5F661C2E8D2A0046433F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				507A5FFC1C2E97E90046433F /* GCDAsyncSocket.m in Sources */,
+				507A60031C2E97E90046433F /* NSString+F53OSCString.m in Sources */,
+				507A5FFB1C2E97E90046433F /* F53OSCTimeTag.m in Sources */,
+				507A5FF71C2E97E90046433F /* F53OSCPacket.m in Sources */,
+				507A60001C2E97E90046433F /* NSData+F53OSCBlob.m in Sources */,
+				507A5FFA1C2E97E90046433F /* F53OSCSocket.m in Sources */,
+				507A5FF91C2E97E90046433F /* F53OSCServer.m in Sources */,
+				507A5FF81C2E97E90046433F /* F53OSCParser.m in Sources */,
+				500897FD1C2EA2E7009B3D42 /* OSCManager.m in Sources */,
+				507A5F751C2E8D2A0046433F /* ViewController.m in Sources */,
+				507A5F721C2E8D2A0046433F /* AppDelegate.m in Sources */,
+				507A60011C2E97E90046433F /* NSDate+F53OSCTimeTag.m in Sources */,
+				507A5FF41C2E97E90046433F /* F53OSCBundle.m in Sources */,
+				507A5FFF1C2E97E90046433F /* MetatoneNetworkManager.m in Sources */,
+				507A5FF51C2E97E90046433F /* F53OSCClient.m in Sources */,
+				507A5FF61C2E97E90046433F /* F53OSCMessage.m in Sources */,
+				507A5FFD1C2E97E90046433F /* GCDAsyncUdpSocket.m in Sources */,
+				507A5F6F1C2E8D2A0046433F /* main.m in Sources */,
+				507A60021C2E97E90046433F /* NSNumber+F53OSCNumber.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		507A5F7F1C2E8D2A0046433F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				507A5F881C2E8D2A0046433F /* RenaissanceTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		507A5F8A1C2E8D2A0046433F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				507A5F931C2E8D2A0046433F /* RenaissanceUITests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		507A5F851C2E8D2A0046433F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 507A5F691C2E8D2A0046433F /* Renaissance */;
+			targetProxy = 507A5F841C2E8D2A0046433F /* PBXContainerItemProxy */;
+		};
+		507A5F901C2E8D2A0046433F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 507A5F691C2E8D2A0046433F /* Renaissance */;
+			targetProxy = 507A5F8F1C2E8D2A0046433F /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		507A5F761C2E8D2A0046433F /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				507A5F771C2E8D2A0046433F /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		507A5F7B1C2E8D2A0046433F /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				507A5F7C1C2E8D2A0046433F /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		507A5F951C2E8D2A0046433F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = NO;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		507A5F961C2E8D2A0046433F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		507A5F981C2E8D2A0046433F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = CB4694CE9D547FCAAC1FA21B /* Pods.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = Renaissance/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/build/Debug-iphoneos",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = sergio.chan.Renaissance;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				VALID_ARCHS = "armv7 armv7s arm64";
+			};
+			name = Debug;
+		};
+		507A5F991C2E8D2A0046433F /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 89ADCAB85BFAB9767AC5A8C6 /* Pods.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = Renaissance/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/build/Debug-iphoneos",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = sergio.chan.Renaissance;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				VALID_ARCHS = "armv7 armv7s arm64";
+			};
+			name = Release;
+		};
+		507A5F9B1C2E8D2A0046433F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = RenaissanceTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = sergio.chan.RenaissanceTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Renaissance.app/Renaissance";
+			};
+			name = Debug;
+		};
+		507A5F9C1C2E8D2A0046433F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = RenaissanceTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = sergio.chan.RenaissanceTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Renaissance.app/Renaissance";
+			};
+			name = Release;
+		};
+		507A5F9E1C2E8D2A0046433F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = RenaissanceUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = sergio.chan.RenaissanceUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = Renaissance;
+				USES_XCTRUNNER = YES;
+			};
+			name = Debug;
+		};
+		507A5F9F1C2E8D2A0046433F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = RenaissanceUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = sergio.chan.RenaissanceUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = Renaissance;
+				USES_XCTRUNNER = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		507A5F651C2E8D2A0046433F /* Build configuration list for PBXProject "Renaissance" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				507A5F951C2E8D2A0046433F /* Debug */,
+				507A5F961C2E8D2A0046433F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		507A5F971C2E8D2A0046433F /* Build configuration list for PBXNativeTarget "Renaissance" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				507A5F981C2E8D2A0046433F /* Debug */,
+				507A5F991C2E8D2A0046433F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		507A5F9A1C2E8D2A0046433F /* Build configuration list for PBXNativeTarget "RenaissanceTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				507A5F9B1C2E8D2A0046433F /* Debug */,
+				507A5F9C1C2E8D2A0046433F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		507A5F9D1C2E8D2A0046433F /* Build configuration list for PBXNativeTarget "RenaissanceUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				507A5F9E1C2E8D2A0046433F /* Debug */,
+				507A5F9F1C2E8D2A0046433F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 507A5F621C2E8D2A0046433F /* Project object */;
+}
