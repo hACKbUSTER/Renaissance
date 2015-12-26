@@ -214,6 +214,20 @@ double radians(float degrees) {
         nodeCount = 0;
     }else
     {
+//        CABasicAnimation *positionAnimation = [CABasicAnimation animationWithKeyPath:@"position.z"];
+//        positionAnimation.toValue = [NSNumber numberWithFloat:geometryNode.position.z - 30.0f];
+//        positionAnimation.duration = 1.0;
+//        positionAnimation.removedOnCompletion = NO;
+//        positionAnimation.autoreverses = NO;
+//        positionAnimation.repeatCount = 1;
+//        positionAnimation.fillMode = kCAFillModeForwards;
+//        [CATransaction setCompletionBlock:^
+//         {
+//             //node.position = NewSCNPosition;
+//         }];
+//        [geometryNode addAnimation:positionAnimation forKey:@"position.z"];
+//        [CATransaction commit];
+
         NSMutableArray *nodeArray = [allNodeArray objectAtIndex:nodeCount];
         NSLog(@"%lu",(unsigned long)nodeArray.count);
         for (SCNNode * node in nodeArray)
