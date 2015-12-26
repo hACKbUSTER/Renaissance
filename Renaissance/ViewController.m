@@ -8,9 +8,11 @@
 
 #import "ViewController.h"
 #import "OSCManager.h"
+#include <CoreMotion/CoreMotion.h>
 
 @interface ViewController ()
 @property (nonatomic, strong) F53OSCClient *oscClient;
+@property (nonatomic, strong) CMMotionManager *motionManager;
 @end
 
 @implementation ViewController
@@ -31,6 +33,48 @@
         NSDictionary *dict = [NSDictionary dictionaryWithObjects:@[@5,@"test string!",@5.34] forKeys:@[@"test1",@"test2",@"test3"]];
         [[OSCManager sharedInstance] sendPacketWithDictionary:dict];
     }
+}
+
+- (void)initMotionManager
+{
+    self.motionManager = [[CMMotionManager alloc] init];
+    self.motionManager.showsDeviceMovementDisplay = YES;
+    self.motionManager.deviceMotionUpdateInterval = 1.0/60.0;
+    if (([CMMotionManager availableAttitudeReferenceFrames] & CMAttitudeReferenceFrameXTrueNorthZVertical) != 0)
+    {
+        [self.motionManager startDeviceMotionUpdatesUsingReferenceFrame: CMAttitudeReferenceFrameXTrueNorthZVertical
+                                                           toQueue: [NSOperationQueue mainQueue]
+                                                       withHandler: ^(CMDeviceMotion *motion, NSError *error)
+         {
+             double roll = motion.attitude.roll;
+             double pitch = motion.attitude.roll;
+             double yaw = motion.attitude.yaw;
+         }];
+    }
+    else
+    {
+        NSLog(@"DeviceMotion not Availabe!");
+    }
+    
+    if([self.motionManager isGyroAvailable])
+    {
+        if([self.motionManager isGyroActive] == NO)
+        {
+            [self.motionManager startGyroUpdatesToQueue:[NSOperationQueue mainQueue]
+                                            withHandler:^(CMGyroData *gyroData, NSError *error)
+             {
+                 double x = gyroData.rotationRate.x;
+                 double y = gyroData.rotationRate.y;
+                 double z = gyroData.rotationRate.z;
+             }];
+        }
+    }
+    else
+    {
+        NSLog(@"Gyroscope not Available!");
+    }
+
+
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
