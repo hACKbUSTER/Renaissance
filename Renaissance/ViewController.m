@@ -22,6 +22,8 @@ double radians(float degrees) {
     SCNNode *cameraNode;
     CGFloat angle;
     SCNNode *geometryNode;
+    BOOL fullSpeedMode;
+    NSTimer * frameUpateTimer;
 }
 
 @property (nonatomic,strong) SCNView *sceneKitView;
@@ -41,6 +43,7 @@ double radians(float degrees) {
 - (void)viewDidLoad {
     [super viewDidLoad];
     angle = 0.0f;
+    fullSpeedMode = NO;
     
     [[OSCManager sharedInstance] setAddress:@"169.254.172.171"];
     [[OSCManager sharedInstance] setPort:7400];
@@ -73,15 +76,18 @@ double radians(float degrees) {
     cameraNode.camera.xFov = 60.0;
     
     allNodeArray = [NSMutableArray array];
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < 100; i++)
     {
         NSMutableArray *nodeArray = [NSMutableArray array];
-        for (int k = 0; k < 6; k ++)
+        for (int k = 0; k < 3; k ++)
         {
             //NSLog(@"NUMBER %d",i);
-            SCNBox *sceneKitBox = [SCNBox boxWithWidth:15 height:(arc4random()%100 + 10) length:15 chamferRadius:1];
+            SCNBox *sceneKitBox = [SCNBox boxWithWidth:15 height:(arc4random()%100 + 10) length:15 chamferRadius:0.0f];
             SCNNode *boxNode = [SCNNode nodeWithGeometry:sceneKitBox];
-            boxNode.position = SCNVector3Make((-100.0f + arc4random()%200),-sceneKitBox.height, -i*30);
+            
+            CGFloat nextX = (k-1) * 40 + -50.0f + arc4random()% (k * 40);
+
+            boxNode.position = SCNVector3Make(nextX,-sceneKitBox.height - 10, -i*25);
             [geometryNode addChildNode:boxNode];
             [nodeArray addObject:boxNode];
         }
@@ -112,9 +118,10 @@ double radians(float degrees) {
     
     nodeCount = 0;
     timer=[NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(buildingLevelUp) userInfo:nil repeats:YES];
-
-//    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapEvent:)];
-//    [self.view addGestureRecognizer:tap];
+    frameUpateTimer = [NSTimer scheduledTimerWithTimeInterval:1.0f/60.0f target:self selector:@selector(frameUpdate:) userInfo:nil repeats:YES];
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapEvent:)];
+    [self.view addGestureRecognizer:tap];
     
     [self initMotionManager];
     // Do any additional setup after loading the view, typically from a nib.
@@ -193,13 +200,25 @@ double radians(float degrees) {
     {
         NSLog(@"Gyroscope not Available!");
     }
+}
 
-
+- (void)frameUpdate:(id)sender
+{
+    geometryNode.position = SCNVector3Make(geometryNode.position.x,geometryNode.position.y,geometryNode.position.z + 0.8f);
 }
 
 - (void)tapEvent:(id)sender
 {
     // 发送点击事件
+    if(fullSpeedMode)
+    {
+        fullSpeedMode = NO;
+    }
+    else
+    {
+        fullSpeedMode = YES;
+    }
+    
     UITapGestureRecognizer *t = (UITapGestureRecognizer *)sender;
     CGPoint location = [t locationInView:self.view];
     NSDictionary *dict = [NSDictionary dictionaryWithObjects:@[@2,@([NSString stringWithFormat:@"%.1f",location.x].floatValue),@([NSString stringWithFormat:@"%.1f",location.y].floatValue)] forKeys:@[@"date_type",@"location_x",@"location_y"]];
@@ -237,7 +256,7 @@ double radians(float degrees) {
             
             [CATransaction begin];
             CABasicAnimation *positionAnimation = [CABasicAnimation animationWithKeyPath:@"position.y"];
-            positionAnimation.toValue = [NSNumber numberWithDouble:0.0f];
+            positionAnimation.toValue = [NSNumber numberWithDouble:2.0f];
             positionAnimation.duration = 1.0;
             positionAnimation.removedOnCompletion = NO;
             positionAnimation.autoreverses = NO;
