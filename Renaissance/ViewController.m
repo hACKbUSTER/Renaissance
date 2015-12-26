@@ -11,7 +11,6 @@
 #include <CoreMotion/CoreMotion.h>
 
 @interface ViewController ()
-@property (nonatomic, strong) F53OSCClient *oscClient;
 @property (nonatomic, strong) CMMotionManager *motionManager;
 @end
 
@@ -22,6 +21,9 @@
     [[OSCManager sharedInstance] setAddress:@"169.254.172.171"];
     [[OSCManager sharedInstance] setPort:7400];
     
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapEvent:)];
+    [self.view addGestureRecognizer:tap];
+    
     // Do any additional setup after loading the view, typically from a nib.
 }
 
@@ -30,8 +32,17 @@
     NSLog(@"touchMoved");
     if(touches.count == 1)
     {
-        NSDictionary *dict = [NSDictionary dictionaryWithObjects:@[@5,@"test string!",@5.34] forKeys:@[@"test1",@"test2",@"test3"]];
-        [[OSCManager sharedInstance] sendPacketWithDictionary:dict];
+        UITouch *touch = [touches allObjects].firstObject;
+        if(touch.phase == UITouchPhaseMoved)
+        {
+            CGPoint location = [touch locationInView:self.view];
+            NSDictionary *dict = [NSDictionary dictionaryWithObjects:@[@1,@([NSString stringWithFormat:@"%.1f",location.x].floatValue),@([NSString stringWithFormat:@"%.1f",location.y].floatValue)] forKeys:@[@"date_type",@"location_x",@"location_y"]];
+            [[OSCManager sharedInstance] sendPacketWithDictionary:dict];
+        }
+        else
+        {
+            return;
+        }
     }
 }
 
@@ -76,6 +87,16 @@
 
 
 }
+
+- (void)tapEvent:(id)sender
+{
+    // 发送点击事件
+    UITapGestureRecognizer *t = (UITapGestureRecognizer *)sender;
+    CGPoint location = [t locationInView:self.view];
+    NSDictionary *dict = [NSDictionary dictionaryWithObjects:@[@2,@([NSString stringWithFormat:@"%.1f",location.x].floatValue),@([NSString stringWithFormat:@"%.1f",location.y].floatValue)] forKeys:@[@"date_type",@"location_x",@"location_y"]];
+    [[OSCManager sharedInstance] sendPacketWithDictionary:dict];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
