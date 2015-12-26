@@ -146,7 +146,7 @@ double radians(float degrees) {
 - (void)initMotionManager
 {
     self.motionManager = [[CMMotionManager alloc] init];
-    self.motionManager.showsDeviceMovementDisplay = YES;
+    self.motionManager.showsDeviceMovementDisplay = NO;
     self.motionManager.deviceMotionUpdateInterval = 1.0/30.0;
     if (([CMMotionManager availableAttitudeReferenceFrames] & CMAttitudeReferenceFrameXTrueNorthZVertical) != 0)
     {
