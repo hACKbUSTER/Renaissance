@@ -16,6 +16,7 @@
 
 - (void)sendPacketWithPattern:(NSString *)pattern Value:(NSArray *)array;
 - (void)setAddress:(NSString *)address;
+- (void)connect;
 - (void)setPort:(NSInteger)port;
 - (void)sendPacketWithDictionary:(NSDictionary *)dictionary;
 @end

@@ -195,7 +195,7 @@
     
     speed = 0.2f;
     areaId = AreaTrainStation;//AreaCity;
-    nodeArrayCount = 200;
+    nodeArrayCount = 120;
     buildingMaxHeight = 200;
     timeInDay = TimeMorning;
     weather = WeatherNormal;
@@ -205,6 +205,7 @@
     
     [[OSCManager sharedInstance] setAddress:@"169.254.172.171"];
     [[OSCManager sharedInstance] setPort:7400];
+    [[OSCManager sharedInstance] connect];
     
     geometryNode = [SCNNode node];
     sceneKitView = [[SCNView alloc] initWithFrame:self.view.bounds];
@@ -243,8 +244,9 @@
         for (int k = 0; k < count; k ++)
         {
             CGFloat height = (arc4random()%buildingMaxHeight + 10.0f);
-            if(i>40 && i< 100)
+            if(i>30 && i< 70)
             {
+                // 屌爆了！
                 height = 0.0f;
             }
             
@@ -382,6 +384,8 @@
             for(SCNNode *node in array)
             {
                 node.hidden = YES;
+                [(SCNMaterial *)node.geometry.materials.firstObject diffuse].contents = nil;
+                [(SCNMaterial *)node.geometry.materials.firstObject normal].contents = nil;
                 [node removeFromParentNode];
             }
         }
@@ -494,6 +498,7 @@
             [CATransaction commit];
         }
         nodeCount ++;
+        NSLog(@"node count plus to:%d",nodeCount);
         fps = 0;
     }
     
@@ -601,10 +606,7 @@
         return;
     }
     else
-    {
-        NSMutableArray *nodeArray = [allNodeArray objectAtIndex:nodeCount];
-        NSLog(@"%lu",(unsigned long)nodeArray.count);
-        
+    {        
         NSInteger area_id = areaId;
         NSInteger time_day = timeInDay;
         

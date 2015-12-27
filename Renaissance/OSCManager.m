@@ -8,7 +8,7 @@
 
 #import "OSCManager.h"
 
-@interface OSCManager ()
+@interface OSCManager () <F53OSCClientDelegate,F53OSCPacketDestination>
 {
     NSString *_address;
     NSInteger _port;
@@ -48,6 +48,19 @@
     return;
 }
 
+- (void)connect
+{
+    BOOL err = [self.oscClient connect];
+    if(!err)
+    {
+        NSLog(@"connect error");
+    }
+    else
+    {
+        NSLog(@"connect success");
+    }
+}
+
 - (void)sendPacketWithDictionary:(NSDictionary *)dictionary
 {
     NSString *pattern = @"";
@@ -70,5 +83,20 @@
                                    arguments:array];
     [self.oscClient sendPacket:message toHost:_address onPort:_port];
     NSLog(@"send packet with pattern:%@ and values:%@",pattern,array);
+}
+
+- (void) clientDidConnect:(F53OSCClient *)client
+{
+    NSLog(@"clientDidConnect");
+}
+
+- (void) clientDidDisconnect:(F53OSCClient *)client
+{
+    NSLog(@"clientDidDisconnect");
+}
+
+- (void) takeMessage:(F53OSCMessage *)message
+{
+    NSLog(@"takeMessage");
 }
 @end
