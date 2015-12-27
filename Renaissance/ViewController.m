@@ -93,7 +93,7 @@
     SCNBox *rainShape = [SCNBox boxWithWidth:200 height:200 length:200 chamferRadius:0];
  
     rainParticle.particleImage = [UIImage imageNamed:@"rainParticle.png"];
-    rainParticle.birthRate = 200;
+    rainParticle.birthRate = 0;
     rainParticle.particleVelocity = 100;
     rainParticle.birthDirection = SCNParticleBirthDirectionConstant;
     rainParticle.spreadingAngle = 0;
@@ -443,20 +443,26 @@
 
 - (void)tapEvent:(id)sender
 {
-    // 发送点击事件
-    if(fullSpeedMode)
-    {
-        fullSpeedMode = NO;
-    }
-    else
-    {
-        fullSpeedMode = YES;
-    }
+    // 发送点击
+    
     
     UITapGestureRecognizer *t = (UITapGestureRecognizer *)sender;
     CGPoint location = [t locationInView:self.view];
+    
+    if(rainParticle.birthRate <= 0.0f)
+    {
+        // 进入下雨情景
+        weather = WeatherRainy;
+        rainParticle.birthRate = 200.0f;
+    }
+    else
+    {
+        weather = WeatherNormal;
+        rainParticle.birthRate = 0.0f;
+    }
+    
     NSDictionary *dict = [NSDictionary dictionaryWithObjects:@[@2,@([NSString stringWithFormat:@"%.1f",location.x].floatValue),@([NSString stringWithFormat:@"%.1f",location.y].floatValue)] forKeys:@[@"date_type",@"location_x",@"location_y"]];
-    [[OSCManager sharedInstance] sendPacketWithDictionary:dict];
+    //[[OSCManager sharedInstance] sendPacketWithDictionary:dict];
 }
 
 - (void)uploadData:(id)sender
