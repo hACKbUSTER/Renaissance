@@ -60,6 +60,9 @@
     NSInteger buildingMaxHeight;
     
     NSInteger fps;
+    
+    CGFloat maxHeight;
+    CGFloat minHeight;
 }
 
 @property (nonatomic,strong) SCNView *sceneKitView;
@@ -79,7 +82,7 @@
     [super viewDidLoad];
     speed = 0.2f;
     areaId = 1;
-    nodeArrayCount = 500;
+    nodeArrayCount = 300;
     buildingMaxHeight = 100;
     
     fullSpeedMode = YES;
@@ -118,16 +121,16 @@
     for (int i = 0; i < nodeArrayCount; i++)
     {
         NSMutableArray *nodeArray = [NSMutableArray array];
-        for (int k = 0; k < 4; k ++)
+        NSInteger count = arc4random()%4 + 2;
+        for (int k = 0; k < count; k ++)
         {
-            SCNBox *sceneKitBox = [SCNBox boxWithWidth:15 height:(arc4random()%buildingMaxHeight + 10) length:15 chamferRadius:0.0f];
+            SCNBox *sceneKitBox = [SCNBox boxWithWidth:15 height:0.0f length:15 chamferRadius:0.0f];
             SCNNode *boxNode = [SCNNode nodeWithGeometry:sceneKitBox];
-            
             boxNode.hidden = YES;
             
-            CGFloat nextX = (k-1) * 40 + -100.0f + arc4random()% (k * 40);
-
-            boxNode.position = SCNVector3Make(nextX,-sceneKitBox.height - 10, -i*50);
+            CGFloat nextX = -50.0f + arc4random()%100;
+            
+            boxNode.position = SCNVector3Make(nextX, 0.0f, -i*50);
             [geometryNode addChildNode:boxNode];
             [nodeArray addObject:boxNode];
         }
@@ -137,14 +140,14 @@
     SCNMaterial *mat = [SCNMaterial material];
     
     UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0.0f, 0.0f, 100.0f, 100.0f)];
-    view.backgroundColor = [UIColor whiteColor];
+    view.backgroundColor = [UIColor clearColor];
     view.layer.geometryFlipped = YES;
     
     mat.diffuse.contents = [self imageWithView:view];
     
-    SCNPlane *floor = [SCNPlane planeWithWidth:20000 height:10000];
-    floor.widthSegmentCount = 100;
-    floor.heightSegmentCount = 100;
+    SCNPlane *floor = [SCNPlane planeWithWidth:1000 height:30000];
+    floor.widthSegmentCount = 10;
+    floor.heightSegmentCount = 300;
     floor.materials = @[mat];
     
     SCNNode *floorNode = [SCNNode nodeWithGeometry:floor];
@@ -252,13 +255,14 @@
                 [node removeFromParentNode];
             }
         }
+        geometryNode.position = SCNVector3Make(geometryNode.position.x,geometryNode.position.y,0.0f);
         [frameUpateTimer invalidate];
         [oscTransmitTimer invalidate];
         nodeCount = 0;
         return;
     }
     
-    if(nodeCount >= nodeArrayCount - 50)
+    if(nodeCount >= nodeArrayCount - 22)
     {
         // 最后50个减速
         if(fullSpeedMode)
@@ -266,19 +270,25 @@
     }
     
     NSLog(@"fps?:%ld",(long)fps);
-    if(fps % 60 == 0)
-    {
-        if(speed < 1.0f && fullSpeedMode)
-            speed = speed + 0.05;
-        
-        if(speed > 0.0f && !fullSpeedMode)
-            speed = speed - 0.05;
-    }
+//    if(fps % 60 == 0)
+//    {
+//        if(speed < 1.0f && fullSpeedMode)
+//            speed = speed + 0.05;
+//        
+//        if(speed > 0.0f && !fullSpeedMode)
+//            speed = speed - 0.05;
+//    }
+    if(speed < 1.0f && fullSpeedMode)
+        speed = speed + 0.05/60;
+    
+    if(speed > 0.0f && !fullSpeedMode)
+        speed = speed - 0.05/60;
+    
     fps++;
     if(speed >= 1.0f)
     {
         // 匀速状态
-        geometryNode.position = SCNVector3Make(geometryNode.position.x,geometryNode.position.y,geometryNode.position.z + speed * 1.15f);
+        geometryNode.position = SCNVector3Make(geometryNode.position.x,geometryNode.position.y,geometryNode.position.z + speed * 1.22f);
     }
     else
     {
@@ -289,19 +299,24 @@
     {
         NSLog(@"nodeCount :%d",nodeCount);
         NSMutableArray *nodeArray = [allNodeArray objectAtIndex:nodeCount];
+        maxHeight = 0.0f;
+        minHeight = 0.0f;
+        
         for (SCNNode * node in nodeArray)
         {
-            SCNVector3 SCNPosition = node.position;
-            if(SCNPosition.y >= 0)
-            {
-                continue;
-            }
-            
             node.hidden = NO;
             
+            CGFloat height = (arc4random()%buildingMaxHeight + 10);
+            if(height >= maxHeight)
+                maxHeight = height;
+            
+            if(height <= minHeight || minHeight == 0.0f)
+                minHeight = height;
+            
             [CATransaction begin];
-            CABasicAnimation *positionAnimation = [CABasicAnimation animationWithKeyPath:@"position.y"];
-            positionAnimation.toValue = [NSNumber numberWithDouble:2.0f];
+            CABasicAnimation *positionAnimation = [CABasicAnimation animationWithKeyPath:@"geometry.height"];
+            positionAnimation.fromValue = [NSNumber numberWithDouble:0.0f];
+            positionAnimation.toValue = [NSNumber numberWithDouble:height];
             positionAnimation.duration = 1.0;
             positionAnimation.removedOnCompletion = NO;
             positionAnimation.autoreverses = NO;
@@ -313,7 +328,7 @@
                  // 可以把之前的node移除掉一些
                  //node.position = NewSCNPosition;
              }];
-            [node addAnimation:positionAnimation forKey:@"position.z"];
+            [node addAnimation:positionAnimation forKey:@"geometry.height"];
             [CATransaction commit];
         }
         nodeCount ++;
@@ -350,21 +365,6 @@
     {
         NSMutableArray *nodeArray = [allNodeArray objectAtIndex:nodeCount];
         NSLog(@"%lu",(unsigned long)nodeArray.count);
-        
-        CGFloat maxHeight = 0.0f;
-        SCNNode *t_node = nodeArray.firstObject;
-        CGFloat minHeight = [(SCNBox *)t_node.geometry height];
-        
-        for (SCNNode * node in nodeArray)
-        {
-            CGFloat height = [(SCNBox *)node.geometry height];
-            
-            if(height >= maxHeight)
-                maxHeight = height;
-            
-            if(height <= minHeight)
-                minHeight = height;
-        }
         
         NSInteger area_id = areaId;
         if(!hasReturnZero)
