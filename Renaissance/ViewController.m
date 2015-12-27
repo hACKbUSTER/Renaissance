@@ -85,7 +85,7 @@
     speed = 0.2f;
     areaId = AreaCity;
     nodeArrayCount = 300;
-    buildingMaxHeight = 100;
+    buildingMaxHeight = 200;
     timeInDay = TimeMorning;
     weather = WeatherNormal;
     
@@ -216,7 +216,7 @@
     self.motionManager.deviceMotionUpdateInterval = 1.0/30.0;
     
     [self.motionManager startDeviceMotionUpdatesToQueue:[NSOperationQueue mainQueue] withHandler: ^(CMDeviceMotion *motion, NSError *error){
-        cameraNode.eulerAngles = SCNVector3Make(0, -motion.attitude.roll/2, 0);
+        cameraNode.eulerAngles = SCNVector3Make(0, -motion.attitude.yaw/5, 0);
         cameraNode.position = SCNVector3Make(10*CC_RADIANS_TO_DEGREES(-motion.attitude.roll), cameraNode.position.y, cameraNode.position.z);
     }];
     /**
