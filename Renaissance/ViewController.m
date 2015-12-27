@@ -194,8 +194,8 @@
     cloudArray = [[NSMutableArray alloc] init];
     
     speed = 0.2f;
-    areaId = AreaCity;
-    nodeArrayCount = 100;
+    areaId = AreaTrainStation;//AreaCity;
+    nodeArrayCount = 200;
     buildingMaxHeight = 200;
     timeInDay = TimeMorning;
     weather = WeatherNormal;
@@ -242,7 +242,13 @@
         NSInteger count = arc4random()%4 + 2;
         for (int k = 0; k < count; k ++)
         {
-            SCNBox *sceneKitBox = [SCNBox boxWithWidth:15 height:(arc4random()%buildingMaxHeight + 10) length:15 chamferRadius:0.0f];
+            CGFloat height = (arc4random()%buildingMaxHeight + 10.0f);
+            if(i>40 && i< 100)
+            {
+                height = 0.0f;
+            }
+            
+            SCNBox *sceneKitBox = [SCNBox boxWithWidth:15 height:height length:15 chamferRadius:0.0f];
             sceneKitBox.materials = @[mat];
             SCNNode *boxNode = [SCNNode nodeWithGeometry:sceneKitBox];
             boxNode.hidden = YES;
@@ -476,7 +482,8 @@
                      NSMutableArray *nodeArray = [allNodeArray objectAtIndex:(nodeCount - 20)];
                      for(SCNNode *node in nodeArray)
                      {
-                         node.geometry = nil;
+//                         [(SCNMaterial *)node.geometry.materials.firstObject diffuse].contents = nil;
+//                         [(SCNMaterial *)node.geometry.materials.firstObject normal].contents = nil;
                          [node removeAllAnimations];
                          [node removeFromParentNode];
                      }
@@ -510,10 +517,13 @@
     
     if (weather != WeatherWindy)
     {
-        for (SCNNode* cloud in cloudArray)
+        if(cloudArray.count > 0)
         {
-            NSLog(@"[cloud removeFromParentNode];");
-            [cloud removeFromParentNode];
+            for (SCNNode* cloud in cloudArray)
+            {
+                [cloud removeFromParentNode];
+            }
+            [cloudArray removeAllObjects];
         }
     }
 }
