@@ -12,6 +12,24 @@ double radians(float degrees) {
     return ( degrees * 3.14159265 ) / 180.0;
 }
 
+typedef NS_ENUM(NSInteger, TimeInDay) {
+    TimeMorning,
+    TimeNoon,
+    TimeNight
+};
+
+typedef NS_ENUM(NSInteger, AreaId) {
+    AreaCity,
+    AreaTrainStation,
+    AreaRiver
+};
+
+typedef NS_ENUM(NSInteger, WeatherId) {
+    WeatherNormal,
+    WeatherRainy,
+    WeatherWindy,
+};
+
 @interface ViewController : UIViewController
 
 @end

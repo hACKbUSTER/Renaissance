@@ -47,11 +47,11 @@
     /**
      *  区域编号
      */
-    NSInteger areaId;
+    AreaId areaId;
     /**
      *  天气编号
      */
-    NSInteger weather;
+    WeatherId weather;
     
     BOOL hasReturnZero;
     
@@ -63,6 +63,8 @@
     
     CGFloat maxHeight;
     CGFloat minHeight;
+    
+    TimeInDay timeInDay;
 }
 
 @property (nonatomic,strong) SCNView *sceneKitView;
@@ -81,9 +83,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     speed = 0.2f;
-    areaId = 1;
+    areaId = AreaCity;
     nodeArrayCount = 300;
     buildingMaxHeight = 100;
+    timeInDay = TimeMorning;
+    weather = WeatherNormal;
     
     fullSpeedMode = YES;
     hasReturnZero = NO;
@@ -127,6 +131,8 @@
             SCNBox *sceneKitBox = [SCNBox boxWithWidth:15 height:0.0f length:15 chamferRadius:0.0f];
             SCNNode *boxNode = [SCNNode nodeWithGeometry:sceneKitBox];
             boxNode.hidden = YES;
+            
+            //boxNode.pivot = SCNMatrix4MakeScale(0.5f, 0.5f, 0.0f);//(0.5f, 0.5f, 0.0f,0.5f);
             
             CGFloat nextX = -50.0f + arc4random()%100;
             
@@ -255,7 +261,24 @@
                 [node removeFromParentNode];
             }
         }
-        geometryNode.position = SCNVector3Make(geometryNode.position.x,geometryNode.position.y,0.0f);
+        [CATransaction begin];
+        CABasicAnimation *positionAnimation = [CABasicAnimation animationWithKeyPath:@"position.z"];
+        positionAnimation.toValue = [NSNumber numberWithDouble:0.0f];
+        positionAnimation.duration = 1.0;
+        positionAnimation.removedOnCompletion = NO;
+        positionAnimation.autoreverses = NO;
+        positionAnimation.repeatCount = 1;
+        positionAnimation.fillMode = kCAFillModeForwards;
+        [CATransaction setCompletionBlock:^
+         {
+             //                 node.position = SCNVector3Make(SCNPosition.x, 2.0f, SCNPosition.z);
+             // 可以把之前的node移除掉一些
+             //node.position = NewSCNPosition;
+         }];
+        [geometryNode addAnimation:positionAnimation forKey:@"position.z"];
+        [CATransaction commit];
+        
+//        geometryNode.position = SCNVector3Make(geometryNode.position.x,geometryNode.position.y,0.0f);
         [frameUpateTimer invalidate];
         [oscTransmitTimer invalidate];
         nodeCount = 0;
@@ -264,20 +287,12 @@
     
     if(nodeCount >= nodeArrayCount - 22)
     {
-        // 最后50个减速
+        // 最后20个减速
         if(fullSpeedMode)
             fullSpeedMode = NO;
     }
     
     NSLog(@"fps?:%ld",(long)fps);
-//    if(fps % 60 == 0)
-//    {
-//        if(speed < 1.0f && fullSpeedMode)
-//            speed = speed + 0.05;
-//        
-//        if(speed > 0.0f && !fullSpeedMode)
-//            speed = speed - 0.05;
-//    }
     if(speed < 1.0f && fullSpeedMode)
         speed = speed + 0.05/60;
     
@@ -288,7 +303,7 @@
     if(speed >= 1.0f)
     {
         // 匀速状态
-        geometryNode.position = SCNVector3Make(geometryNode.position.x,geometryNode.position.y,geometryNode.position.z + speed * 1.22f);
+        geometryNode.position = SCNVector3Make(geometryNode.position.x,geometryNode.position.y,geometryNode.position.z + speed * 1.24f);
     }
     else
     {
@@ -367,13 +382,16 @@
         NSLog(@"%lu",(unsigned long)nodeArray.count);
         
         NSInteger area_id = areaId;
+        NSInteger time_day = timeInDay;
+        
         if(!hasReturnZero)
         {
             hasReturnZero = YES;
             area_id = 0;
+            time_day = 0;
         }
             
-        NSDictionary *dict = [NSDictionary dictionaryWithObjects:@[@(maxHeight),@(minHeight),@(speed),@(area_id),@(1),@5] forKeys:@[@"max_height",@"min_height",@"speed",@"area_id",@"weather",@"data_type"]];
+        NSDictionary *dict = [NSDictionary dictionaryWithObjects:@[@(maxHeight),@(minHeight),@(speed),@(area_id),@(weather),@5,@(time_day)] forKeys:@[@"max_height",@"min_height",@"speed",@"area_id",@"weather",@"data_type",@"time"]];
         [[OSCManager sharedInstance] sendPacketWithDictionary:dict];
     }
 }
@@ -383,11 +401,8 @@
 {
     UIGraphicsBeginImageContextWithOptions(view.bounds.size, NO, 0.0);
     [view.layer renderInContext:UIGraphicsGetCurrentContext()];
-    
     UIImage * img = UIGraphicsGetImageFromCurrentImageContext();
-    
     UIGraphicsEndImageContext();
-    
     return img;
 }
 
