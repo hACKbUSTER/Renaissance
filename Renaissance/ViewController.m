@@ -112,26 +112,27 @@
 
 - (void)sunSystem
 {
+
     NSLog(@"sunSystem SHOULD RUN ONLY  ONCE");
-    sunSphereOuter = [SCNSphere sphereWithRadius:300];
+    sunSphereOuter = [SCNSphere sphereWithRadius:200];
     sunSphereOuter.segmentCount = 1;
     sunSphereOuterNode = [SCNNode nodeWithGeometry:sunSphereOuter];
     SCNMaterial *sunBlankMaterial = [SCNMaterial material];
     sunBlankMaterial.transparency = 0.0;
     sunBlankMaterial.transparencyMode = SCNTransparencyModeAOne;
     sunSphereOuter.materials = @[sunBlankMaterial];
-    sunSphereOuterNode.position = SCNVector3Make(0, 1000, -1500);
+    sunSphereOuterNode.position = SCNVector3Make(0, 700, -3000);
     
     [sceneKitScene.rootNode addChildNode:sunSphereOuterNode];
-    [self sunExpandAnimation];
+    //[self sunExpandAnimation];
     
 }
 
 - (void)sunExpandAnimation
 {
     NSLog(@"sunExpandAnimation");
-    sunExpandAnimationTimer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(addSunSphereSegment) userInfo:nil repeats:YES];
-    //[sunExpandAnimationTimer fire];
+    sunSphereOuterNode.hidden = NO;
+    sunExpandAnimationTimer = [NSTimer scheduledTimerWithTimeInterval:0.3 target:self selector:@selector(addSunSphereSegment) userInfo:nil repeats:YES];
 }
 
 - (void)addSunSphereSegment
@@ -146,6 +147,23 @@
     }
 }
 
+- (void)sunDestroyAnimation
+{
+    NSLog(@"sunDestroyAnimation");
+    sunExpandAnimationTimer = [NSTimer scheduledTimerWithTimeInterval:0.3 target:self selector:@selector(minusSunSphereSegment) userInfo:nil repeats:YES];
+}
+
+- (void)minusSunSphereSegment
+{
+    NSLog(@"minusSunSphereSegment");
+    sunSphereOuter.segmentCount = sunSphereOuter.segmentCount - 1;
+    sunSphereOuterNode.geometry = sunSphereOuter;
+    if (sunSphereOuter.segmentCount <= 2)
+    {
+        [sunExpandAnimationTimer invalidate];
+        sunSphereOuterNode.hidden = YES;
+    }
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -185,7 +203,7 @@
     
     cameraNode.camera.zNear = 0.001;
     cameraNode.camera.zFar = 99999999;
-    cameraNode.camera.yFov = 100.0;
+    cameraNode.camera.yFov = 70.0;
     cameraNode.camera.xFov = 60.0;
     
     SCNMaterial *mat = [SCNMaterial material];
@@ -274,10 +292,10 @@
     self.motionManager.showsDeviceMovementDisplay = NO;
     self.motionManager.deviceMotionUpdateInterval = 1.0/30.0;
     
-    [self.motionManager startDeviceMotionUpdatesToQueue:[NSOperationQueue mainQueue] withHandler: ^(CMDeviceMotion *motion, NSError *error){
-        cameraNode.eulerAngles = SCNVector3Make(0, -motion.attitude.yaw/5, 0);
-        cameraNode.position = SCNVector3Make(10*CC_RADIANS_TO_DEGREES(-motion.attitude.roll), cameraNode.position.y, cameraNode.position.z);
-    }];
+//    [self.motionManager startDeviceMotionUpdatesToQueue:[NSOperationQueue mainQueue] withHandler: ^(CMDeviceMotion *motion, NSError *error){
+//        cameraNode.eulerAngles = SCNVector3Make(0, -motion.attitude.yaw/5, 0);
+//        cameraNode.position = SCNVector3Make(10*CC_RADIANS_TO_DEGREES(-motion.attitude.roll), cameraNode.position.y, cameraNode.position.z);
+//    }];
     /**
      
      if (([CMMotionManager availableAttitudeReferenceFrames] & CMAttitudeReferenceFrameXTrueNorthZVertical) != 0)
@@ -453,8 +471,9 @@
     {
         SCNBox *cloudBox = [SCNBox boxWithWidth:20 height:2 length:20 chamferRadius:0];
         SCNNode *cloudBoxNode = [SCNNode nodeWithGeometry:cloudBox];
-        cloudBoxNode.position = SCNVector3Make(arc4random()%300, 200 + arc4random()%100, -(nodeCount + 3)*50);
+        cloudBoxNode.position = SCNVector3Make(-150.0+arc4random()%300, 150 + arc4random()%100, -(nodeCount + 3)*50);
         [geometryNode addChildNode:cloudBoxNode];
+        
     }
 }
 
@@ -466,16 +485,52 @@
     UITapGestureRecognizer *t = (UITapGestureRecognizer *)sender;
     CGPoint location = [t locationInView:self.view];
     
-    if(rainParticle.birthRate <= 0.0f)
+    if(location.y <= self.view.frame.size.height /2.0f)
     {
-        // 进入下雨情景
-        weather = WeatherRainy;
-        rainParticle.birthRate = 200.0f;
+        // tap top part
+        if(timeInDay == TimeMorning)
+        {
+            timeInDay = TimeNoon;
+            [self sunExpandAnimation];
+        }
+        else if(timeInDay == TimeNoon)
+        {
+            timeInDay = TimeNight;
+            [self sunDestroyAnimation];
+        }
+        else if(timeInDay == TimeNight)
+        {
+            timeInDay = TimeMorning;
+        }
     }
     else
     {
-        weather = WeatherNormal;
-        rainParticle.birthRate = 0.0f;
+        // tap bottom part
+        if(weather == WeatherNormal)
+        {
+            weather = WeatherRainy;
+            if(rainParticle.birthRate <= 0.0f)
+            {
+                // 进入下雨情景
+                rainParticle.birthRate = 200.0f;
+            }
+        }
+        else if(weather == WeatherRainy)
+        {
+            weather = WeatherWindy;
+            if(rainParticle.birthRate > 0.0f)
+            {
+                rainParticle.birthRate = 0.0f;
+            }
+        }
+        else if(weather == WeatherWindy)
+        {
+            weather = WeatherNormal;
+            if(rainParticle.birthRate > 0.0f)
+            {
+                rainParticle.birthRate = 0.0f;
+            }
+        }
     }
     
     NSDictionary *dict = [NSDictionary dictionaryWithObjects:@[@2,@([NSString stringWithFormat:@"%.1f",location.x].floatValue),@([NSString stringWithFormat:@"%.1f",location.y].floatValue)] forKeys:@[@"date_type",@"location_x",@"location_y"]];
