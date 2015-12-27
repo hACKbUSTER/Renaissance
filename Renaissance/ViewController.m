@@ -111,7 +111,7 @@
     cameraNode = [SCNNode node];
     cameraNode.camera = [SCNCamera camera];
     cameraNode.position = SCNVector3Make(0, 150, 150);
-    cameraNode.eulerAngles = SCNVector3Make(radians(-45.0), 0, 0);
+    cameraNode.eulerAngles = SCNVector3Make(radians(-30.0), 0, 0);
     
     [sceneKitView.scene.rootNode addChildNode:cameraNode];
     [sceneKitView setPointOfView:cameraNode];
@@ -121,6 +121,21 @@
     cameraNode.camera.yFov = 100.0;
     cameraNode.camera.xFov = 60.0;
     
+    SCNMaterial *mat = [SCNMaterial material];
+    SCNMaterial *mat_trans = [SCNMaterial material];
+    
+    UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0.0f, 0.0f, 100.0f, 100.0f)];
+    view.backgroundColor = [UIColor blackColor];
+    view.layer.geometryFlipped = YES;
+    
+    mat.diffuse.contents = [self imageWithView:view];
+    
+    UIView *view_trans = [[UIView alloc]initWithFrame:CGRectMake(0.0f, 0.0f, 100.0f, 100.0f)];
+    view_trans.backgroundColor = [UIColor clearColor];
+    view_trans.layer.geometryFlipped = YES;
+    
+    mat_trans.diffuse.contents = [self imageWithView:view_trans];
+    
     allNodeArray = [NSMutableArray array];
     for (int i = 0; i < nodeArrayCount; i++)
     {
@@ -128,29 +143,19 @@
         NSInteger count = arc4random()%4 + 2;
         for (int k = 0; k < count; k ++)
         {
-            SCNBox *sceneKitBox = [SCNBox boxWithWidth:15 height:0.0f length:15 chamferRadius:0.0f];
+            SCNBox *sceneKitBox = [SCNBox boxWithWidth:15 height:(arc4random()%buildingMaxHeight + 10) length:15 chamferRadius:0.0f];
+            sceneKitBox.materials = @[mat_trans];
             SCNNode *boxNode = [SCNNode nodeWithGeometry:sceneKitBox];
             boxNode.hidden = YES;
             
-            //boxNode.pivot = SCNMatrix4MakeScale(0.5f, 0.5f, 0.0f);//(0.5f, 0.5f, 0.0f,0.5f);
-            
             CGFloat nextX = -50.0f + arc4random()%100;
             
-            boxNode.position = SCNVector3Make(nextX, 0.0f, -i*50);
+            boxNode.position = SCNVector3Make(nextX, -sceneKitBox.height - 10.0f, -(i + 1)*50);
             [geometryNode addChildNode:boxNode];
             [nodeArray addObject:boxNode];
-            
         }
         [allNodeArray addObject:nodeArray];
     }
-    
-    SCNMaterial *mat = [SCNMaterial material];
-    
-    UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0.0f, 0.0f, 100.0f, 100.0f)];
-    view.backgroundColor = [UIColor clearColor];
-    view.layer.geometryFlipped = YES;
-    
-    mat.diffuse.contents = [self imageWithView:view];
     
     SCNPlane *floor = [SCNPlane planeWithWidth:1000 height:30000];
     floor.widthSegmentCount = 10;
@@ -304,7 +309,7 @@
     if(speed >= 1.0f)
     {
         // 匀速状态
-        geometryNode.position = SCNVector3Make(geometryNode.position.x,geometryNode.position.y,geometryNode.position.z + speed * 1.24f);
+        geometryNode.position = SCNVector3Make(geometryNode.position.x,geometryNode.position.y,geometryNode.position.z + speed * 1.2f);
     }
     else
     {
@@ -322,17 +327,18 @@
         {
             node.hidden = NO;
             
-            CGFloat height = (arc4random()%buildingMaxHeight + 10);
+            CGFloat height = [(SCNBox *)node.geometry height];
             if(height >= maxHeight)
                 maxHeight = height;
             
             if(height <= minHeight || minHeight == 0.0f)
                 minHeight = height;
             
+            
             [CATransaction begin];
-            CABasicAnimation *positionAnimation = [CABasicAnimation animationWithKeyPath:@"geometry.height"];
-            positionAnimation.fromValue = [NSNumber numberWithDouble:0.0f];
-            positionAnimation.toValue = [NSNumber numberWithDouble:height];
+            CABasicAnimation *positionAnimation = [CABasicAnimation animationWithKeyPath:@"position.y"];
+            positionAnimation.toValue = [NSNumber numberWithDouble:0.0f];
+//            positionAnimation.toValue = [NSNumber numberWithDouble:height];
             positionAnimation.duration = 1.0;
             positionAnimation.removedOnCompletion = NO;
             positionAnimation.autoreverses = NO;
@@ -344,23 +350,9 @@
                  // 可以把之前的node移除掉一些
                  //node.position = NewSCNPosition;
                  
-                 
-                 SCNCylinder *sceneKitTreeCylinder = [SCNCylinder cylinderWithRadius:4 height:8];
-                 SCNNode *treeCylinderNode = [SCNNode nodeWithGeometry:sceneKitTreeCylinder];
-                 SCNCone *sceneKitTreeCone = [SCNCone coneWithTopRadius:0.1 bottomRadius:8 height:20];
-                 SCNNode *treeConeNode = [SCNNode nodeWithGeometry:sceneKitTreeCone];
-                 SCNNode *treeNode = [SCNNode node];
-                 [treeNode addChildNode:treeCylinderNode];
-                 treeCylinderNode.position = SCNVector3Make(0, 0, 0);
-                 treeConeNode.position = SCNVector3Make(0, 13, 0);
-                 [treeNode addChildNode:treeConeNode];
-                 treeNode.position = SCNVector3Make(-50.0f + arc4random()%100, 0.0f, -nodeCount*50);
-                 [geometryNode addChildNode:treeNode];
-                 [nodeArray addObject:treeNode];
-                 
-                 if (nodeCount >= 5)
+                 if (nodeCount >= 8)
                  {
-                     NSMutableArray *nodeArray = [allNodeArray objectAtIndex:(nodeCount - 5)];
+                     NSMutableArray *nodeArray = [allNodeArray objectAtIndex:(nodeCount - 8)];
                      for(SCNNode *node in nodeArray)
                      {
                          [node removeAllAnimations];
