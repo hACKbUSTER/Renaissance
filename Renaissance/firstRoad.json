@@ -1,0 +1,26 @@
+{
+  "object": {
+    "1": [
+{ "timeFromValue":"0" ,"timeToValue":"29" ,  "buildingLeftFromValue":"0" ,"buildingLeftToValue":"2" , "buildingRightFromValue":"3" , "buildingRightToValue":"3" , "treeLeftFromValue":"3" , "treeLeftToValue":"1" , "treeRightFromValue":"0" ,"treeRightToValue":"0"   }
+],
+    "2": [
+{ "timeFromValue":"30" ,"timeToValue":"79" ,  "buildingLeftFromValue":"2" ,"buildingLeftToValue":"3" , "buildingRightFromValue":"3" , "buildingRightToValue":"0" , "treeLeftFromValue":"1" , "treeLeftToValue":"0" , "treeRightFromValue":"0" ,"treeRightToValue":"3"   }
+],
+    "3": [
+{ "timeFromValue":"80" ,"timeToValue":"89" ,  "buildingLeftFromValue":"3" ,"buildingLeftToValue":"1" , "buildingRightFromValue":"0" , "buildingRightToValue":"1" , "treeLeftFromValue":"0" , "treeLeftToValue":"3" , "treeRightFromValue":"3" ,"treeRightToValue":"3"   }
+],
+    "4": [
+{ "timeFromValue":"90" ,"timeToValue":"109" ,  "buildingLeftFromValue":"1" ,"buildingLeftToValue":"1" , "buildingRightFromValue":"1" , "buildingRightToValue":"1" , "treeLeftFromValue":"3" , "treeLeftToValue":"3" , "treeRightFromValue":"3" ,"treeRightToValue":"3"   }
+],
+    "5": [
+{ "timeFromValue":"110" ,"timeToValue":"109" ,  "buildingLeftFromValue":"1" ,"buildingLeftToValue":"3" , "buildingRightFromValue":"1" , "buildingRightToValue":"3" , "treeLeftFromValue":"3" , "treeLeftToValue":"0" , "treeRightFromValue":"3" ,"treeRightToValue":"0"   }
+],
+    "6": [
+{ "timeFromValue":"120" ,"timeToValue":"159" ,  "buildingLeftFromValue":"3" ,"buildingLeftToValue":"0" , "buildingRightFromValue":"3" , "buildingRightToValue":"3" , "treeLeftFromValue":"0" , "treeLeftToValue":"3" , "treeRightFromValue":"0" ,"treeRightToValue":"0"   }
+],
+    "7": [
+{ "timeFromValue":"160" ,"timeToValue":"199" ,  "buildingLeftFromValue":"0" ,"buildingLeftToValue":"1" , "buildingRightFromValue":"3" , "buildingRightToValue":"1" , "treeLeftFromValue":"3" , "treeLeftToValue":"3" , "treeRightFromValue":"0" ,"treeRightToValue":"3"   }
+]
+
+  }
+}

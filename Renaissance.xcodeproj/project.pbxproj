@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0DE4D1C21C2F858200630833 /* firstRoad.json in Resources */ = {isa = PBXBuildFile; fileRef = 0DE4D1C11C2F858200630833 /* firstRoad.json */; };
 		500897F81C2E9D85009B3D42 /* libSocketRocket.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 500897F71C2E9D85009B3D42 /* libSocketRocket.a */; };
 		500897FD1C2EA2E7009B3D42 /* OSCManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 500897FC1C2EA2E7009B3D42 /* OSCManager.m */; };
 		507A5F6F1C2E8D2A0046433F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 507A5F6E1C2E8D2A0046433F /* main.m */; };
@@ -55,6 +56,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0DE4D1C11C2F858200630833 /* firstRoad.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = firstRoad.json; sourceTree = "<group>"; };
 		500897F71C2E9D85009B3D42 /* libSocketRocket.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSocketRocket.a; path = "Pods/../build/Debug-iphoneos/libSocketRocket.a"; sourceTree = "<group>"; };
 		500897FB1C2EA2E7009B3D42 /* OSCManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OSCManager.h; sourceTree = "<group>"; };
 		500897FC1C2EA2E7009B3D42 /* OSCManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OSCManager.m; sourceTree = "<group>"; };
@@ -202,6 +204,7 @@
 				507A5F741C2E8D2A0046433F /* ViewController.m */,
 				507A5F761C2E8D2A0046433F /* Main.storyboard */,
 				507A5F791C2E8D2A0046433F /* Assets.xcassets */,
+				0DE4D1C11C2F858200630833 /* firstRoad.json */,
 				507A5F7B1C2E8D2A0046433F /* LaunchScreen.storyboard */,
 				507A5F7E1C2E8D2A0046433F /* Info.plist */,
 				507A5F6D1C2E8D2A0046433F /* Supporting Files */,
@@ -391,6 +394,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0DE4D1C21C2F858200630833 /* firstRoad.json in Resources */,
 				507A5FFE1C2E97E90046433F /* LICENSE.txt in Resources */,
 				507A5F7D1C2E8D2A0046433F /* LaunchScreen.storyboard in Resources */,
 				507A5F7A1C2E8D2A0046433F /* Assets.xcassets in Resources */,
