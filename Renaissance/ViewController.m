@@ -123,6 +123,7 @@
     sunSphereOuterNode = [SCNNode nodeWithGeometry:sunSphereOuter];
     SCNMaterial *sunBlankMaterial = [SCNMaterial material];
     sunBlankMaterial.transparency = 0.0;
+    sunBlankMaterial.doubleSided = YES;
     sunBlankMaterial.transparencyMode = SCNTransparencyModeAOne;
     sunSphereOuter.materials = @[sunBlankMaterial];
     sunSphereOuterNode.position = SCNVector3Make(0, 700, -3000);
@@ -654,5 +655,7 @@
 {
     return 0 == arc4random_uniform(denominator);
 }
+
+-(BOOL)prefersStatusBarHidden { return YES; }
 
 @end
