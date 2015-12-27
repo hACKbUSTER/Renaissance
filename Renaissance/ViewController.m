@@ -80,13 +80,6 @@
 @synthesize sceneKitView,sceneKitScene;
 @synthesize allNodeArray,nodeCount;
 
-- (void)rainParticleSystem
-{
-    SCNParticleSystem *rainParticle = [SCNParticleSystem particleSystem];
-    rainParticle.loops = YES;
-    rainParticle.emitterShape = [SCNParticleSystem]
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     speed = 0.2f;
@@ -129,19 +122,7 @@
     cameraNode.camera.xFov = 60.0;
     
     SCNMaterial *mat = [SCNMaterial material];
-    SCNMaterial *mat_trans = [SCNMaterial material];
-    
-    UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0.0f, 0.0f, 100.0f, 100.0f)];
-    view.backgroundColor = [UIColor blackColor];
-    view.layer.geometryFlipped = YES;
-    
-    mat.diffuse.contents = [self imageWithView:view];
-    
-    UIView *view_trans = [[UIView alloc]initWithFrame:CGRectMake(0.0f, 0.0f, 100.0f, 100.0f)];
-    view_trans.backgroundColor = [UIColor clearColor];
-    view_trans.layer.geometryFlipped = YES;
-    
-    mat_trans.diffuse.contents = [self imageWithView:view_trans];
+    mat.diffuse.contents = [UIImage imageNamed:@"Black"];
     
     allNodeArray = [NSMutableArray array];
     for (int i = 0; i < nodeArrayCount; i++)
@@ -151,7 +132,7 @@
         for (int k = 0; k < count; k ++)
         {
             SCNBox *sceneKitBox = [SCNBox boxWithWidth:15 height:(arc4random()%buildingMaxHeight + 10) length:15 chamferRadius:0.0f];
-            sceneKitBox.materials = @[mat_trans];
+            sceneKitBox.materials = @[mat];
             SCNNode *boxNode = [SCNNode nodeWithGeometry:sceneKitBox];
             boxNode.hidden = YES;
             
@@ -362,7 +343,7 @@
             
             [CATransaction begin];
             CABasicAnimation *positionAnimation = [CABasicAnimation animationWithKeyPath:@"position.y"];
-            positionAnimation.toValue = [NSNumber numberWithDouble:0.0f];
+            positionAnimation.toValue = [NSNumber numberWithDouble:10.0f];
 //            positionAnimation.toValue = [NSNumber numberWithDouble:height];
             positionAnimation.duration = 1.0;
             positionAnimation.removedOnCompletion = NO;
@@ -375,11 +356,12 @@
                  // 可以把之前的node移除掉一些
                  //node.position = NewSCNPosition
                  
-                 if (nodeCount >= 8)
+                 if (nodeCount >= 20)
                  {
-                     NSMutableArray *nodeArray = [allNodeArray objectAtIndex:(nodeCount - 8)];
+                     NSMutableArray *nodeArray = [allNodeArray objectAtIndex:(nodeCount - 20)];
                      for(SCNNode *node in nodeArray)
                      {
+                         node.geometry = nil;
                          [node removeAllAnimations];
                          [node removeFromParentNode];
                      }
@@ -434,37 +416,45 @@
             time_day = 0;
         }
             
-        NSDictionary *dict = [NSDictionary dictionaryWithObjects:@[@(maxHeight),@(minHeight),@(speed),@(area_id),@(weather),@5,@(time_day)] forKeys:@[@"max_height",@"min_height",@"speed",@"area_id",@"weather",@"data_type",@"time"]];
+        NSDictionary *dict = [NSDictionary dictionaryWithObjects:@[@(maxHeight/2.0f),@(minHeight/2.0f),@(speed),@(area_id),@(weather),@5,@(time_day)] forKeys:@[@"max_height",@"min_height",@"speed",@"area_id",@"weather",@"data_type",@"time"]];
         [[OSCManager sharedInstance] sendPacketWithDictionary:dict];
     }
 }
 
 
-- (UIImage *) imageWithView:(UIView *)view
-{
-    UIGraphicsBeginImageContextWithOptions(view.bounds.size, NO, 0.0);
-    [view.layer renderInContext:UIGraphicsGetCurrentContext()];
-    UIImage * img = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return img;
-}
+//- (UIImage *) imageWithView:(UIView *)view
+//{
+//    UIGraphicsBeginImageContextWithOptions(view.bounds.size, NO, 0.0);
+//    [view.layer renderInContext:UIGraphicsGetCurrentContext()];
+//    UIImage * img = UIGraphicsGetImageFromCurrentImageContext();
+//    UIGraphicsEndImageContext();
+//    return img;
+//}
 
 
 - (SCNNode *)treeNodeWithPosition:(CGFloat)treePositionX
 {
-    SCNCylinder *sceneKitTreeCylinder = [SCNCylinder cylinderWithRadius:4 height:16];
+    SCNMaterial *mat = [SCNMaterial material];
+    mat.diffuse.contents = [UIImage imageNamed:@"Black"];
+    
+    SCNCylinder *sceneKitTreeCylinder = [SCNCylinder cylinderWithRadius:4 height:10];
+    sceneKitTreeCylinder.materials = @[mat];
+    
     SCNNode *treeCylinderNode = [SCNNode nodeWithGeometry:sceneKitTreeCylinder];
+
     SCNCone *sceneKitTreeCone = [SCNCone coneWithTopRadius:0.1 bottomRadius:8 height:20];
-    sceneKitTreeCone.radialSegmentCount = 3 + arc4random()%2;
-    sceneKitTreeCylinder.radialSegmentCount = 3 + arc4random()%2;
+    sceneKitTreeCone.materials = @[mat];
+    
+    sceneKitTreeCone.radialSegmentCount = 4 + arc4random()%2;
+    sceneKitTreeCylinder.radialSegmentCount = 0 + arc4random()%2;
     SCNNode *treeConeNode = [SCNNode nodeWithGeometry:sceneKitTreeCone];
     SCNNode *treeNode = [SCNNode node];
     [treeNode addChildNode:treeCylinderNode];
     treeCylinderNode.position = SCNVector3Make(0, 0, 0);
-    treeConeNode.position = SCNVector3Make(0, 18, 0);
+    treeConeNode.position = SCNVector3Make(0, 10, 0);
     [treeNode addChildNode:treeConeNode];
     
-    treeNode.position = SCNVector3Make(treePositionX, 0.0f, -(nodeCount + 2)*50);
+    treeNode.position = SCNVector3Make(treePositionX, -40.0f, -(nodeCount + 5)*50);
     return treeNode;
 }
 
