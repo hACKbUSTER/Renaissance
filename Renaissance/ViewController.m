@@ -79,6 +79,7 @@
 @property (nonatomic,strong)SCNSphere *sunSphereOuter;
 @property (nonatomic,strong)NSTimer *sunExpandAnimationTimer;
 @property (nonatomic,strong)SCNNode *sunSphereOuterNode;
+@property (nonatomic) BOOL isSunAnimating;
 
 @property (nonatomic,strong)NSMutableArray *cloudArray;
 @end
@@ -87,7 +88,7 @@
 @synthesize sceneKitView,sceneKitScene;
 @synthesize allNodeArray,nodeCount;
 @synthesize rainNode,rainParticle;
-@synthesize sunSphereOuter,sunExpandAnimationTimer,sunSphereOuterNode;
+@synthesize sunSphereOuter,sunExpandAnimationTimer,sunSphereOuterNode,isSunAnimating;
 @synthesize cloudArray;
 
 - (void)rainParticleSystem
@@ -129,31 +130,47 @@
     [sceneKitScene.rootNode addChildNode:sunSphereOuterNode];
     //[self sunExpandAnimation];
     
+    isSunAnimating = NO;
+    
 }
 
 - (void)sunExpandAnimation
 {
-    NSLog(@"sunExpandAnimation");
-    sunSphereOuterNode.hidden = NO;
-    sunExpandAnimationTimer = [NSTimer scheduledTimerWithTimeInterval:0.3 target:self selector:@selector(addSunSphereSegment) userInfo:nil repeats:YES];
+    if (!isSunAnimating)
+    {
+        NSLog(@"sunExpandAnimation");
+        sunSphereOuterNode.hidden = NO;
+        isSunAnimating = YES;
+        sunExpandAnimationTimer = [NSTimer scheduledTimerWithTimeInterval:0.3 target:self selector:@selector(addSunSphereSegment) userInfo:nil repeats:YES];
+    }
 }
 
 - (void)addSunSphereSegment
 {
-    NSLog(@"addSunSphereSegment");
-    sunSphereOuter.segmentCount = sunSphereOuter.segmentCount + 1;
+    NSLog(@"addSunSphereSegment : %ld",(long)sunSphereOuter.segmentCount);
+    
+    if (sunSphereOuter.segmentCount <=20)
+    {
+        sunSphereOuter.segmentCount = sunSphereOuter.segmentCount + 1;
+    }
     //sunSphereOuterNode.eulerAngles = SCNVector3Make(sunSphereOuterNode.eulerAngles.x, sunSphereOuterNode.eulerAngles.y+ radians(20), sunSphereOuterNode.eulerAngles.z);
     //sunSphereOuterNode.geometry = sunSphereOuter;
     if (sunSphereOuter.segmentCount >= 20)
     {
         [sunExpandAnimationTimer invalidate];
+        isSunAnimating = NO;
     }
 }
 
 - (void)sunDestroyAnimation
 {
     NSLog(@"sunDestroyAnimation");
-    sunExpandAnimationTimer = [NSTimer scheduledTimerWithTimeInterval:0.3 target:self selector:@selector(minusSunSphereSegment) userInfo:nil repeats:YES];
+    if (!isSunAnimating)
+    {
+        isSunAnimating = YES;
+        sunExpandAnimationTimer = [NSTimer scheduledTimerWithTimeInterval:0.3 target:self selector:@selector(minusSunSphereSegment) userInfo:nil repeats:YES];
+    }
+
 }
 
 - (void)minusSunSphereSegment
@@ -165,6 +182,7 @@
     {
         [sunExpandAnimationTimer invalidate];
         sunSphereOuterNode.hidden = YES;
+        isSunAnimating = NO;
     }
 }
 
@@ -512,13 +530,19 @@
         // tap top part
         if(timeInDay == TimeMorning)
         {
-            timeInDay = TimeNoon;
-            [self sunExpandAnimation];
+            if (!isSunAnimating)
+            {
+                timeInDay = TimeNoon;
+                [self sunExpandAnimation];
+            }
         }
         else if(timeInDay == TimeNoon)
         {
-            timeInDay = TimeNight;
-            [self sunDestroyAnimation];
+            if (!isSunAnimating)
+            {
+                timeInDay = TimeNight;
+                [self sunDestroyAnimation];
+            }
         }
         else if(timeInDay == TimeNight)
         {
