@@ -151,9 +151,9 @@
 {
     NSLog(@"addSunSphereSegment : %ld",(long)sunSphereOuter.segmentCount);
     
-    if (sunSphereOuter.segmentCount <=20)
+    if ([(SCNSphere *)sunSphereOuterNode.geometry segmentCount] <=20)
     {
-        sunSphereOuter.segmentCount = sunSphereOuter.segmentCount + 1;
+        [(SCNSphere *)sunSphereOuterNode.geometry setSegmentCount:[(SCNSphere *)sunSphereOuterNode.geometry segmentCount] + 1];
     }
     //sunSphereOuterNode.eulerAngles = SCNVector3Make(sunSphereOuterNode.eulerAngles.x, sunSphereOuterNode.eulerAngles.y+ radians(20), sunSphereOuterNode.eulerAngles.z);
     //sunSphereOuterNode.geometry = sunSphereOuter;
@@ -178,8 +178,8 @@
 - (void)minusSunSphereSegment
 {
     NSLog(@"minusSunSphereSegment");
-    sunSphereOuter.segmentCount = sunSphereOuter.segmentCount - 1;
-    sunSphereOuterNode.geometry = sunSphereOuter;
+    //sunSphereOuter.segmentCount = sunSphereOuter.segmentCount - 1;
+    [(SCNSphere *)sunSphereOuterNode.geometry setSegmentCount:[(SCNSphere *)sunSphereOuterNode.geometry segmentCount] - 1];
     if (sunSphereOuter.segmentCount <= 2)
     {
         [sunExpandAnimationTimer invalidate];
@@ -217,7 +217,7 @@
     sceneKitView.backgroundColor = [UIColor blackColor];
     [self.view addSubview:sceneKitView];
     sceneKitView.autoenablesDefaultLighting = YES;
-    sceneKitView.showsStatistics = YES;
+    sceneKitView.showsStatistics = NO;
     
     sceneKitView.debugOptions = SCNDebugOptionShowWireframe;
     
@@ -460,9 +460,10 @@
         
         for (SCNNode * node in nodeArray)
         {
-            node.hidden = NO;
-            
             CGFloat height = [(SCNBox *)node.geometry height];
+            if(height > 0.0f)
+                node.hidden = NO;
+            
             if(height >= maxHeight)
                 maxHeight = height;
             
