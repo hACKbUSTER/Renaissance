@@ -244,7 +244,7 @@
         for (int k = 0; k < count; k ++)
         {
             CGFloat height = (arc4random()%buildingMaxHeight + 10.0f);
-            if(i>30 && i< 70)
+            if(i>30 && i< 60)
             {
                 // 屌爆了！
                 height = 0.0f;
@@ -384,8 +384,8 @@
             for(SCNNode *node in array)
             {
                 node.hidden = YES;
-                [(SCNMaterial *)node.geometry.materials.firstObject diffuse].contents = nil;
-                [(SCNMaterial *)node.geometry.materials.firstObject normal].contents = nil;
+//                [(SCNMaterial *)node.geometry.materials.firstObject diffuse].contents = nil;
+//                [(SCNMaterial *)node.geometry.materials.firstObject normal].contents = nil;
                 [node removeFromParentNode];
             }
         }
@@ -444,15 +444,18 @@
         
         SCNNode *box = (SCNNode *)nodeArray.firstObject;
         minHeight = [(SCNBox *)box.geometry height];
-
-        CGFloat right = (50 + arc4random()%50);
-        SCNNode *treeLeft = [self treeNodeWithPosition:right];
-        SCNNode *treeRight = [self treeNodeWithPosition:-right];
         
-        [geometryNode addChildNode:treeLeft];
-        [nodeArray addObject:treeLeft];
-        [geometryNode addChildNode:treeRight];
-        [nodeArray addObject:treeRight];
+        if(minHeight > 0.0f)
+        {
+            CGFloat right = (50 + arc4random()%50);
+            SCNNode *treeLeft = [self treeNodeWithPosition:right];
+            SCNNode *treeRight = [self treeNodeWithPosition:-right];
+            
+            [geometryNode addChildNode:treeLeft];
+            [nodeArray addObject:treeLeft];
+            [geometryNode addChildNode:treeRight];
+            [nodeArray addObject:treeRight];
+        }
         
         for (SCNNode * node in nodeArray)
         {
