@@ -214,24 +214,33 @@
     self.motionManager = [[CMMotionManager alloc] init];
     self.motionManager.showsDeviceMovementDisplay = NO;
     self.motionManager.deviceMotionUpdateInterval = 1.0/30.0;
-    if (([CMMotionManager availableAttitudeReferenceFrames] & CMAttitudeReferenceFrameXTrueNorthZVertical) != 0)
-    {
-        [self.motionManager startDeviceMotionUpdatesUsingReferenceFrame: CMAttitudeReferenceFrameXTrueNorthZVertical
-                                                           toQueue: [NSOperationQueue mainQueue]
-                                                       withHandler: ^(CMDeviceMotion *motion, NSError *error)
-         {
-             double roll = CC_RADIANS_TO_DEGREES(motion.attitude.roll);
-             double pitch = CC_RADIANS_TO_DEGREES(motion.attitude.pitch);
-             double yaw = CC_RADIANS_TO_DEGREES(motion.attitude.yaw);
-             //NSLog(@"roll : %.2f pitch : %.2f yaw : %.2f",roll,pitch,yaw);
-             NSDictionary *motionAttitudeDict = [NSDictionary dictionaryWithObjects:@[[NSString stringWithFormat:@"%.2f",roll],[NSString stringWithFormat:@"%.2f",pitch],[NSString stringWithFormat:@"%.2f",yaw],@4] forKeys:@[@"attitude_roll",@"attitude_pitch",@"attitude_yaw",@"date_type"]];
-             //[[OSCManager sharedInstance] sendPacketWithDictionary:motionAttitudeDict];
-         }];
-    }
-    else
-    {
-        NSLog(@"DeviceMotion not Availabe!");
-    }
+    
+    [self.motionManager startDeviceMotionUpdatesToQueue:[NSOperationQueue mainQueue] withHandler: ^(CMDeviceMotion *motion, NSError *error){
+        cameraNode.eulerAngles = SCNVector3Make(0, -motion.attitude.roll/2, 0);
+        cameraNode.position = SCNVector3Make(10*CC_RADIANS_TO_DEGREES(-motion.attitude.roll), cameraNode.position.y, cameraNode.position.z);
+    }];
+    /**
+     
+     if (([CMMotionManager availableAttitudeReferenceFrames] & CMAttitudeReferenceFrameXTrueNorthZVertical) != 0)
+     {
+     [self.motionManager startDeviceMotionUpdatesUsingReferenceFrame: CMAttitudeReferenceFrameXTrueNorthZVertical
+     toQueue: [NSOperationQueue mainQueue]
+     withHandler: ^(CMDeviceMotion *motion, NSError *error)
+     {
+     double roll = CC_RADIANS_TO_DEGREES(motion.attitude.roll);
+     double pitch = CC_RADIANS_TO_DEGREES(motion.attitude.pitch);
+     double yaw = CC_RADIANS_TO_DEGREES(motion.attitude.yaw);
+     //NSLog(@"roll : %.2f pitch : %.2f yaw : %.2f",roll,pitch,yaw);
+     NSDictionary *motionAttitudeDict = [NSDictionary dictionaryWithObjects:@[[NSString stringWithFormat:@"%.2f",roll],[NSString stringWithFormat:@"%.2f",pitch],[NSString stringWithFormat:@"%.2f",yaw],@4] forKeys:@[@"attitude_roll",@"attitude_pitch",@"attitude_yaw",@"date_type"]];
+     //[[OSCManager sharedInstance] sendPacketWithDictionary:motionAttitudeDict];
+     }];
+     }
+     else
+     {
+     NSLog(@"DeviceMotion not Availabe!");
+     }
+     
+     **/
     
     if([self.motionManager isGyroAvailable])
     {
@@ -350,6 +359,31 @@
                  // 可以把之前的node移除掉一些
                  //node.position = NewSCNPosition;
                  
+                 SCNCylinder *sceneKitTreeCylinder = [SCNCylinder cylinderWithRadius:4 height:16];
+                 SCNNode *treeCylinderNode = [SCNNode nodeWithGeometry:sceneKitTreeCylinder];
+                 SCNCone *sceneKitTreeCone = [SCNCone coneWithTopRadius:0.1 bottomRadius:8 height:20];
+                 sceneKitTreeCone.radialSegmentCount = 3 + arc4random()%2;
+                 sceneKitTreeCylinder.radialSegmentCount = 3 + arc4random()%2;
+                 SCNNode *treeConeNode = [SCNNode nodeWithGeometry:sceneKitTreeCone];
+                 SCNNode *treeNode = [SCNNode node];
+                 [treeNode addChildNode:treeCylinderNode];
+                 treeCylinderNode.position = SCNVector3Make(0, 0, 0);
+                 treeConeNode.position = SCNVector3Make(0, 18, 0);
+                 [treeNode addChildNode:treeConeNode];
+                 
+                 double treePositionX;
+                 if ([self RollWithDenominator:2])
+                 {
+                     treePositionX = 50 + arc4random()%100;
+                 }else
+                 {
+                     treePositionX = -50 - arc4random()%100;
+                 }
+                 
+                 treeNode.position = SCNVector3Make(treePositionX, 0.0f, -(nodeCount + 2)*50);
+                 [geometryNode addChildNode:treeNode];
+                 [nodeArray addObject:treeNode];
+                 
                  if (nodeCount >= 8)
                  {
                      NSMutableArray *nodeArray = [allNodeArray objectAtIndex:(nodeCount - 8)];
@@ -428,6 +462,11 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (BOOL)RollWithDenominator:(int)denominator
+{
+    return 0 == arc4random_uniform(denominator);
 }
 
 @end
