@@ -14,6 +14,7 @@
 @property (nonatomic, strong) F53OSCClient *oscClient;
 + (OSCManager *) sharedInstance;
 
+- (void)sendPacketWithPattern:(NSString *)pattern Value:(NSArray *)array;
 - (void)setAddress:(NSString *)address;
 - (void)setPort:(NSInteger)port;
 - (void)sendPacketWithDictionary:(NSDictionary *)dictionary;

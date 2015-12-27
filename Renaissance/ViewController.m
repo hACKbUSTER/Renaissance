@@ -143,7 +143,7 @@
     [super viewDidLoad];
     speed = 0.2f;
     areaId = AreaCity;
-    nodeArrayCount = 300;
+    nodeArrayCount = 100;
     buildingMaxHeight = 200;
     timeInDay = TimeMorning;
     weather = WeatherNormal;
@@ -380,7 +380,9 @@
         NSLog(@"nodeCount :%d",nodeCount);
         NSMutableArray *nodeArray = [allNodeArray objectAtIndex:nodeCount];
         maxHeight = 0.0f;
-        minHeight = 0.0f;
+        
+        SCNNode *box = (SCNNode *)nodeArray.firstObject;
+        minHeight = [(SCNBox *)box.geometry height];
 
         CGFloat right = (50 + arc4random()%50);
         SCNNode *treeLeft = [self treeNodeWithPosition:right];
@@ -399,7 +401,7 @@
             if(height >= maxHeight)
                 maxHeight = height;
             
-            if(height <= minHeight || minHeight == 0.0f)
+            if(height <= minHeight && height > 0.0f)
                 minHeight = height;
 
             
@@ -477,9 +479,8 @@
             area_id = 0;
             time_day = 0;
         }
-            
-        NSDictionary *dict = [NSDictionary dictionaryWithObjects:@[@(maxHeight/2.0f),@(minHeight/2.0f),@(speed),@(area_id),@(weather),@5,@(time_day)] forKeys:@[@"max_height",@"min_height",@"speed",@"area_id",@"weather",@"data_type",@"time"]];
-        [[OSCManager sharedInstance] sendPacketWithDictionary:dict];
+        
+        [[OSCManager sharedInstance] sendPacketWithPattern:[NSString stringWithFormat:@"/weather/min_height/speed/data_type/max_height/area_id/time"] Value:@[@(weather),@(minHeight/2.0f),@(speed),@5,@(maxHeight/2.0f),@(area_id),@(time_day)]];
     }
 }
 

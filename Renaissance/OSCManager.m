@@ -62,4 +62,13 @@
     [self.oscClient sendPacket:message toHost:_address onPort:_port];
     NSLog(@"send packet with pattern:%@ and values:%@",pattern,dictionary.allValues);
 }
+
+- (void)sendPacketWithPattern:(NSString *)pattern Value:(NSArray *)array
+{
+    F53OSCMessage *message =
+    [F53OSCMessage messageWithAddressPattern:pattern
+                                   arguments:array];
+    [self.oscClient sendPacket:message toHost:_address onPort:_port];
+    NSLog(@"send packet with pattern:%@ and values:%@",pattern,array);
+}
 @end
