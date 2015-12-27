@@ -342,6 +342,16 @@
 //                 node.position = SCNVector3Make(SCNPosition.x, 2.0f, SCNPosition.z);
                  // 可以把之前的node移除掉一些
                  //node.position = NewSCNPosition;
+                 if (nodeCount >= 5)
+                 {
+                     NSMutableArray *nodeArray = [allNodeArray objectAtIndex:(nodeCount - 5)];
+                     for(SCNNode *node in nodeArray)
+                     {
+                         [node removeAllAnimations];
+                         [node removeFromParentNode];
+                     }
+                 }
+                 
              }];
             [node addAnimation:positionAnimation forKey:@"geometry.height"];
             [CATransaction commit];
