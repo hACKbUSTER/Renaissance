@@ -509,10 +509,13 @@
     
     if (weather != WeatherWindy)
     {
-        for (SCNNode* cloud in cloudArray)
+        if(cloudArray.count > 0)
         {
-            NSLog(@"[cloud removeFromParentNode];");
-            [cloud removeFromParentNode];
+            for (SCNNode* cloud in cloudArray)
+            {
+                [cloud removeFromParentNode];
+            }
+            [cloudArray removeAllObjects];
         }
     }
 }
