@@ -150,7 +150,7 @@
             
             CGFloat nextX = -50.0f + arc4random()%100;
             
-            boxNode.position = SCNVector3Make(nextX, -sceneKitBox.height - 10.0f, -(i + 1)*50);
+            boxNode.position = SCNVector3Make(nextX, -sceneKitBox.height - 10.0f, -(i + 3)*50);
             [geometryNode addChildNode:boxNode];
             [nodeArray addObject:boxNode];
         }
@@ -331,6 +331,15 @@
         NSMutableArray *nodeArray = [allNodeArray objectAtIndex:nodeCount];
         maxHeight = 0.0f;
         minHeight = 0.0f;
+
+        CGFloat right = (50 + arc4random()%50);
+        SCNNode *treeLeft = [self treeNodeWithPosition:right];
+        SCNNode *treeRight = [self treeNodeWithPosition:-right];
+        
+        [geometryNode addChildNode:treeLeft];
+        [nodeArray addObject:treeLeft];
+        [geometryNode addChildNode:treeRight];
+        [nodeArray addObject:treeRight];
         
         for (SCNNode * node in nodeArray)
         {
@@ -342,7 +351,7 @@
             
             if(height <= minHeight || minHeight == 0.0f)
                 minHeight = height;
-            
+
             
             [CATransaction begin];
             CABasicAnimation *positionAnimation = [CABasicAnimation animationWithKeyPath:@"position.y"];
@@ -357,32 +366,7 @@
              {
 //                 node.position = SCNVector3Make(SCNPosition.x, 2.0f, SCNPosition.z);
                  // 可以把之前的node移除掉一些
-                 //node.position = NewSCNPosition;
-                 
-                 SCNCylinder *sceneKitTreeCylinder = [SCNCylinder cylinderWithRadius:4 height:16];
-                 SCNNode *treeCylinderNode = [SCNNode nodeWithGeometry:sceneKitTreeCylinder];
-                 SCNCone *sceneKitTreeCone = [SCNCone coneWithTopRadius:0.1 bottomRadius:8 height:20];
-                 sceneKitTreeCone.radialSegmentCount = 3 + arc4random()%2;
-                 sceneKitTreeCylinder.radialSegmentCount = 3 + arc4random()%2;
-                 SCNNode *treeConeNode = [SCNNode nodeWithGeometry:sceneKitTreeCone];
-                 SCNNode *treeNode = [SCNNode node];
-                 [treeNode addChildNode:treeCylinderNode];
-                 treeCylinderNode.position = SCNVector3Make(0, 0, 0);
-                 treeConeNode.position = SCNVector3Make(0, 18, 0);
-                 [treeNode addChildNode:treeConeNode];
-                 
-                 double treePositionX;
-                 if ([self RollWithDenominator:2])
-                 {
-                     treePositionX = 50 + arc4random()%100;
-                 }else
-                 {
-                     treePositionX = -50 - arc4random()%100;
-                 }
-                 
-                 treeNode.position = SCNVector3Make(treePositionX, 0.0f, -(nodeCount + 2)*50);
-                 [geometryNode addChildNode:treeNode];
-                 [nodeArray addObject:treeNode];
+                 //node.position = NewSCNPosition
                  
                  if (nodeCount >= 8)
                  {
@@ -458,6 +442,24 @@
     return img;
 }
 
+
+- (SCNNode *)treeNodeWithPosition:(CGFloat)treePositionX
+{
+    SCNCylinder *sceneKitTreeCylinder = [SCNCylinder cylinderWithRadius:4 height:16];
+    SCNNode *treeCylinderNode = [SCNNode nodeWithGeometry:sceneKitTreeCylinder];
+    SCNCone *sceneKitTreeCone = [SCNCone coneWithTopRadius:0.1 bottomRadius:8 height:20];
+    sceneKitTreeCone.radialSegmentCount = 3 + arc4random()%2;
+    sceneKitTreeCylinder.radialSegmentCount = 3 + arc4random()%2;
+    SCNNode *treeConeNode = [SCNNode nodeWithGeometry:sceneKitTreeCone];
+    SCNNode *treeNode = [SCNNode node];
+    [treeNode addChildNode:treeCylinderNode];
+    treeCylinderNode.position = SCNVector3Make(0, 0, 0);
+    treeConeNode.position = SCNVector3Make(0, 18, 0);
+    [treeNode addChildNode:treeConeNode];
+    
+    treeNode.position = SCNVector3Make(treePositionX, 0.0f, -(nodeCount + 2)*50);
+    return treeNode;
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
