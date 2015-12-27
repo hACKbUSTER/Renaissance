@@ -112,14 +112,14 @@
 
 - (void)sunSystem
 {
-    sunSphereOuter = [SCNSphere sphereWithRadius:300];
+    sunSphereOuter = [SCNSphere sphereWithRadius:200];
     sunSphereOuter.segmentCount = 1;
     sunSphereOuterNode = [SCNNode nodeWithGeometry:sunSphereOuter];
     SCNMaterial *sunBlankMaterial = [SCNMaterial material];
     sunBlankMaterial.transparency = 0.0;
     sunBlankMaterial.transparencyMode = SCNTransparencyModeAOne;
     sunSphereOuter.materials = @[sunBlankMaterial];
-    sunSphereOuterNode.position = SCNVector3Make(0, 1000, -1500);
+    sunSphereOuterNode.position = SCNVector3Make(0, 700, -3000);
     
     [sceneKitScene.rootNode addChildNode:sunSphereOuterNode];
     //[self sunExpandAnimation];
@@ -129,8 +129,7 @@
 - (void)sunExpandAnimation
 {
     NSLog(@"sunExpandAnimation");
-    sunExpandAnimationTimer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(addSunSphereSegment) userInfo:nil repeats:YES];
-    //[sunExpandAnimationTimer fire];
+    sunExpandAnimationTimer = [NSTimer scheduledTimerWithTimeInterval:0.3 target:self selector:@selector(addSunSphereSegment) userInfo:nil repeats:YES];
 }
 
 - (void)addSunSphereSegment
@@ -139,6 +138,23 @@
     sunSphereOuter.segmentCount = sunSphereOuter.segmentCount + 1;
     sunSphereOuterNode.geometry = sunSphereOuter;
     if (sunSphereOuter.segmentCount >= 20)
+    {
+        [sunExpandAnimationTimer invalidate];
+    }
+}
+
+- (void)sunDestroyAnimation
+{
+    NSLog(@"sunDestroyAnimation");
+    sunExpandAnimationTimer = [NSTimer scheduledTimerWithTimeInterval:0.3 target:self selector:@selector(minusSunSphereSegment) userInfo:nil repeats:YES];
+}
+
+- (void)minusSunSphereSegment
+{
+    NSLog(@"minusSunSphereSegment");
+    sunSphereOuter.segmentCount = sunSphereOuter.segmentCount - 1;
+    sunSphereOuterNode.geometry = sunSphereOuter;
+    if (sunSphereOuter.segmentCount <= 1)
     {
         [sunExpandAnimationTimer invalidate];
     }
@@ -182,7 +198,7 @@
     
     cameraNode.camera.zNear = 0.001;
     cameraNode.camera.zFar = 99999999;
-    cameraNode.camera.yFov = 100.0;
+    cameraNode.camera.yFov = 70.0;
     cameraNode.camera.xFov = 60.0;
     
     SCNMaterial *mat = [SCNMaterial material];
@@ -465,6 +481,7 @@
         else if(timeInDay == TimeNoon)
         {
             timeInDay = TimeNight;
+            [self sunDestroyAnimation];
         }
         else if(timeInDay == TimeNight)
         {
