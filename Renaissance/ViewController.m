@@ -79,6 +79,8 @@
 @property (nonatomic,strong)SCNSphere *sunSphereOuter;
 @property (nonatomic,strong)NSTimer *sunExpandAnimationTimer;
 @property (nonatomic,strong)SCNNode *sunSphereOuterNode;
+
+@property (nonatomic,strong)NSMutableArray *cloudArray;
 @end
 
 @implementation ViewController
@@ -86,6 +88,7 @@
 @synthesize allNodeArray,nodeCount;
 @synthesize rainNode,rainParticle;
 @synthesize sunSphereOuter,sunExpandAnimationTimer,sunSphereOuterNode;
+@synthesize cloudArray;
 
 - (void)rainParticleSystem
 {
@@ -167,6 +170,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    //cloud
+    cloudArray = [[NSMutableArray alloc] init];
+    
     speed = 0.2f;
     areaId = AreaCity;
     nodeArrayCount = 100;
@@ -467,11 +474,28 @@
     
     if (weather == WeatherWindy)
     {
-        SCNBox *cloudBox = [SCNBox boxWithWidth:20 height:2 length:20 chamferRadius:0];
-        SCNNode *cloudBoxNode = [SCNNode nodeWithGeometry:cloudBox];
-        cloudBoxNode.position = SCNVector3Make(-150.0+arc4random()%300, 150 + arc4random()%100, -(nodeCount + 3)*50);
-        [geometryNode addChildNode:cloudBoxNode];
+        if (arc4random()%4 == 1)
+        {
+            SCNBox *cloudBox = [SCNBox boxWithWidth:20 height:2 length:20 chamferRadius:0];
+            SCNNode *cloudBoxNode = [SCNNode nodeWithGeometry:cloudBox];
+            cloudBoxNode.position = SCNVector3Make(-150.0+arc4random()%300, 150 + arc4random()%100, -(nodeCount + 3)*50);
+            SCNMaterial *cloudBlankMaterial = [SCNMaterial material];
+            cloudBlankMaterial.transparency = 0.0;
+            //cloudBlankMaterial.transparent.contents = [UIImage imageNamed:@"Black"];
+            cloudBox.materials = @[cloudBlankMaterial];
+            [geometryNode addChildNode:cloudBoxNode];
+            [cloudArray addObject:cloudBoxNode];
+        }
         
+    }
+    
+    if (weather != WeatherWindy)
+    {
+        for (SCNNode* cloud in cloudArray)
+        {
+            NSLog(@"[cloud removeFromParentNode];");
+            [cloud removeFromParentNode];
+        }
     }
 }
 
