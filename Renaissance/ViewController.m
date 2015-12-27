@@ -70,8 +70,9 @@
 @property (nonatomic,strong) SCNView *sceneKitView;
 @property (nonatomic,strong) SCNScene *sceneKitScene;
 @property (nonatomic,strong) NSMutableArray *allNodeArray;
-
+@property (nonatomic,strong) SCNNode *rainNode;
 @property (nonatomic) int nodeCount;
+@property (nonatomic,strong) SCNParticleSystem *rainParticle;
 @property (nonatomic, strong) CMMotionManager *motionManager;
 
 @end
@@ -79,12 +80,29 @@
 @implementation ViewController
 @synthesize sceneKitView,sceneKitScene;
 @synthesize allNodeArray,nodeCount;
+@synthesize rainNode,rainParticle;
 
 - (void)rainParticleSystem
 {
-    SCNParticleSystem *rainParticle = [SCNParticleSystem particleSystem];
+    rainParticle = [SCNParticleSystem particleSystem];
     rainParticle.loops = YES;
-    rainParticle.emitterShape = [SCNParticleSystem]
+    SCNBox *rainShape = [SCNBox boxWithWidth:200 height:200 length:200 chamferRadius:0];
+ 
+    rainParticle.particleImage = [UIImage imageNamed:@"rainParticle.png"];
+    rainParticle.birthRate = 200;
+    rainParticle.particleVelocity = 100;
+    rainParticle.birthDirection = SCNParticleBirthDirectionConstant;
+    rainParticle.spreadingAngle = 0;
+    rainParticle.emittingDirection = SCNVector3Make(0, -radians(180), 0);
+    rainParticle.emitterShape = rainShape;
+    rainParticle.affectedByGravity = YES;
+    rainParticle.particleSize = 5;
+    //rainParticle.
+    
+    rainNode = [SCNNode node];
+    rainNode.position = SCNVector3Make(0, 200, 0);
+    [rainNode addParticleSystem:rainParticle];
+    [cameraNode addChildNode:rainNode];
 }
 
 - (void)viewDidLoad {
@@ -189,6 +207,8 @@
     
     NSDictionary *dict = [NSDictionary dictionaryWithObjects:@[@(0),@(0),@(0),@(0),@(0),@0] forKeys:@[@"max_height",@"min_height",@"speed",@"area_id",@"weather",@"data_type"]];
     [[OSCManager sharedInstance] sendPacketWithDictionary:dict];
+    
+    [self rainParticleSystem];
 }
 
 - (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
