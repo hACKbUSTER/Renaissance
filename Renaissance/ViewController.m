@@ -80,6 +80,13 @@
 @synthesize sceneKitView,sceneKitScene;
 @synthesize allNodeArray,nodeCount;
 
+- (void)rainParticleSystem
+{
+    SCNParticleSystem *rainParticle = [SCNParticleSystem particleSystem];
+    rainParticle.loops = YES;
+    rainParticle.emitterShape = [SCNParticleSystem]
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     speed = 0.2f;
