@@ -384,7 +384,6 @@
             fullSpeedMode = NO;
     }
     
-    NSLog(@"fps?:%ld",(long)fps);
     if(speed < 1.0f && fullSpeedMode)
         speed = speed + 0.05/60;
     
@@ -404,7 +403,6 @@
     
     if(floorf(fps/40) >= 1.0f/speed)
     {
-        NSLog(@"nodeCount :%d",nodeCount);
         NSMutableArray *nodeArray = [allNodeArray objectAtIndex:nodeCount];
         maxHeight = 0.0f;
         
