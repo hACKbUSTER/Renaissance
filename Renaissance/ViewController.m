@@ -536,6 +536,11 @@
     }
 }
 
+- (void)nightAnimation
+{
+    
+}
+
 - (void)tapEvent:(id)sender
 {
     // 发送点击
