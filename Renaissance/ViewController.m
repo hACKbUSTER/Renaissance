@@ -75,13 +75,16 @@
 @property (nonatomic,strong) SCNParticleSystem *rainParticle;
 @property (nonatomic, strong) CMMotionManager *motionManager;
 
+
+@property (nonatomic,strong)SCNSphere *sunSphereOuter;
+@property (nonatomic,strong)NSTimer *sunExpandAnimationTimer;
 @end
 
 @implementation ViewController
 @synthesize sceneKitView,sceneKitScene;
 @synthesize allNodeArray,nodeCount;
 @synthesize rainNode,rainParticle;
-
+@synthesize sunSphereOuter,sunExpandAnimationTimer;
 
 - (void)rainParticleSystem
 {
@@ -106,6 +109,35 @@
     [cameraNode addChildNode:rainNode];
 }
 
+- (void)sunSystem
+{
+    sunSphereOuter = [SCNSphere sphereWithRadius:300];
+    sunSphereOuter.segmentCount = 5;
+    SCNNode *sunSphereOuterNode = [SCNNode nodeWithGeometry:sunSphereOuter];
+    SCNMaterial *sunBlankMaterial = [SCNMaterial material];
+    sunBlankMaterial.transparency = 0.0;
+    sunBlankMaterial.transparencyMode = SCNTransparencyModeAOne;
+    sunSphereOuter.materials = @[sunBlankMaterial];
+    sunSphereOuterNode.position = SCNVector3Make(0, 1000, -1500);
+    
+    [cameraNode addChildNode:sunSphereOuterNode];
+    [self sunExpandAnimation];
+    
+}
+
+- (void)sunExpandAnimation
+{
+    sunExpandAnimationTimer = [NSTimer timerWithTimeInterval:0.5 target:self selector:@selector(addSunSphereSegment) userInfo:nil repeats:YES];
+}
+
+- (void)addSunSphereSegment
+{
+    sunSphereOuter.segmentCount = sunSphereOuter.segmentCount + 1;
+    if (sunSphereOuter.segmentCount == 20)
+    {
+        [sunExpandAnimationTimer invalidate];
+    }
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -199,6 +231,7 @@
     [[OSCManager sharedInstance] sendPacketWithDictionary:dict];
     
     [self rainParticleSystem];
+    [self sunSystem];
 }
 
 - (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
