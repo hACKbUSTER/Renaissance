@@ -78,13 +78,14 @@
 
 @property (nonatomic,strong)SCNSphere *sunSphereOuter;
 @property (nonatomic,strong)NSTimer *sunExpandAnimationTimer;
+@property (nonatomic,strong)SCNNode *sunSphereOuterNode;
 @end
 
 @implementation ViewController
 @synthesize sceneKitView,sceneKitScene;
 @synthesize allNodeArray,nodeCount;
 @synthesize rainNode,rainParticle;
-@synthesize sunSphereOuter,sunExpandAnimationTimer;
+@synthesize sunSphereOuter,sunExpandAnimationTimer,sunSphereOuterNode;
 
 - (void)rainParticleSystem
 {
@@ -112,28 +113,32 @@
 - (void)sunSystem
 {
     sunSphereOuter = [SCNSphere sphereWithRadius:300];
-    sunSphereOuter.segmentCount = 5;
-    SCNNode *sunSphereOuterNode = [SCNNode nodeWithGeometry:sunSphereOuter];
+    sunSphereOuter.segmentCount = 1;
+    sunSphereOuterNode = [SCNNode nodeWithGeometry:sunSphereOuter];
     SCNMaterial *sunBlankMaterial = [SCNMaterial material];
     sunBlankMaterial.transparency = 0.0;
     sunBlankMaterial.transparencyMode = SCNTransparencyModeAOne;
     sunSphereOuter.materials = @[sunBlankMaterial];
     sunSphereOuterNode.position = SCNVector3Make(0, 1000, -1500);
     
-    [cameraNode addChildNode:sunSphereOuterNode];
-    [self sunExpandAnimation];
+    [sceneKitScene.rootNode addChildNode:sunSphereOuterNode];
+    //[self sunExpandAnimation];
     
 }
 
 - (void)sunExpandAnimation
 {
-    sunExpandAnimationTimer = [NSTimer timerWithTimeInterval:0.5 target:self selector:@selector(addSunSphereSegment) userInfo:nil repeats:YES];
+    NSLog(@"sunExpandAnimation");
+    sunExpandAnimationTimer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(addSunSphereSegment) userInfo:nil repeats:YES];
+    //[sunExpandAnimationTimer fire];
 }
 
 - (void)addSunSphereSegment
 {
+    NSLog(@"addSunSphereSegment");
     sunSphereOuter.segmentCount = sunSphereOuter.segmentCount + 1;
-    if (sunSphereOuter.segmentCount == 20)
+    sunSphereOuterNode.geometry = sunSphereOuter;
+    if (sunSphereOuter.segmentCount >= 20)
     {
         [sunExpandAnimationTimer invalidate];
     }
