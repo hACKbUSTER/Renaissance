@@ -54,12 +54,17 @@
     NSInteger weather;
     
     BOOL hasReturnZero;
+    
+    NSInteger nodeArrayCount;
+    
+    NSInteger buildingMaxHeight;
+    
+    NSInteger fps;
 }
 
 @property (nonatomic,strong) SCNView *sceneKitView;
 @property (nonatomic,strong) SCNScene *sceneKitScene;
 @property (nonatomic,strong) NSMutableArray *allNodeArray;
-@property (nonatomic,strong) NSTimer * timer;
 
 @property (nonatomic) int nodeCount;
 @property (nonatomic, strong) CMMotionManager *motionManager;
@@ -68,13 +73,16 @@
 
 @implementation ViewController
 @synthesize sceneKitView,sceneKitScene;
-@synthesize allNodeArray,nodeCount,timer;
+@synthesize allNodeArray,nodeCount;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    speed = 0.1f;
+    speed = 0.2f;
     areaId = 1;
-    fullSpeedMode = NO;
+    nodeArrayCount = 500;
+    buildingMaxHeight = 100;
+    
+    fullSpeedMode = YES;
     hasReturnZero = NO;
     
     [[OSCManager sharedInstance] setAddress:@"169.254.172.171"];
@@ -93,7 +101,6 @@
     
     sceneKitView.debugOptions = SCNDebugOptionShowWireframe;
     
-    
     cameraNode = [SCNNode node];
     cameraNode.camera = [SCNCamera camera];
     cameraNode.position = SCNVector3Make(0, 150, 150);
@@ -108,17 +115,17 @@
     cameraNode.camera.xFov = 60.0;
     
     allNodeArray = [NSMutableArray array];
-    for (int i = 0; i < 100; i++)
+    for (int i = 0; i < nodeArrayCount; i++)
     {
         NSMutableArray *nodeArray = [NSMutableArray array];
-        for (int k = 0; k < 3; k ++)
+        for (int k = 0; k < 4; k ++)
         {
-            SCNBox *sceneKitBox = [SCNBox boxWithWidth:15 height:(arc4random()%100 + 10) length:15 chamferRadius:0.0f];
+            SCNBox *sceneKitBox = [SCNBox boxWithWidth:15 height:(arc4random()%buildingMaxHeight + 10) length:15 chamferRadius:0.0f];
             SCNNode *boxNode = [SCNNode nodeWithGeometry:sceneKitBox];
             
             boxNode.hidden = YES;
             
-            CGFloat nextX = (k-1) * 40 + -50.0f + arc4random()% (k * 40);
+            CGFloat nextX = (k-1) * 40 + -100.0f + arc4random()% (k * 40);
 
             boxNode.position = SCNVector3Make(nextX,-sceneKitBox.height - 10, -i*50);
             [geometryNode addChildNode:boxNode];
@@ -135,10 +142,9 @@
     
     mat.diffuse.contents = [self imageWithView:view];
     
-    SCNPlane *floor = [SCNPlane planeWithWidth:10000 height:10000];
+    SCNPlane *floor = [SCNPlane planeWithWidth:20000 height:10000];
     floor.widthSegmentCount = 100;
     floor.heightSegmentCount = 100;
-    //floor.reflectivity = 0.0f;
     floor.materials = @[mat];
     
     SCNNode *floorNode = [SCNNode nodeWithGeometry:floor];
@@ -150,8 +156,8 @@
     [sceneKitView.scene.rootNode addChildNode:geometryNode];
     
     nodeCount = 0;
-    timer=[NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(buildingLevelUp) userInfo:nil repeats:YES];
     frameUpateTimer = [NSTimer scheduledTimerWithTimeInterval:1.0f/60.0f target:self selector:@selector(frameUpdate:) userInfo:nil repeats:YES];
+    fps = 0;
     oscTransmitTimer = [NSTimer scheduledTimerWithTimeInterval:1.0f/15.0f target:self selector:@selector(uploadData:) userInfo:nil repeats:YES];
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapEvent:)];
@@ -161,7 +167,6 @@
     
     NSDictionary *dict = [NSDictionary dictionaryWithObjects:@[@(0),@(0),@(0),@(0),@(0),@0] forKeys:@[@"max_height",@"min_height",@"speed",@"area_id",@"weather",@"data_type"]];
     [[OSCManager sharedInstance] sendPacketWithDictionary:dict];
-    // Do any additional setup after loading the view, typically from a nib.
 }
 
 - (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
@@ -237,7 +242,83 @@
 
 - (void)frameUpdate:(id)sender
 {
-    geometryNode.position = SCNVector3Make(geometryNode.position.x,geometryNode.position.y,geometryNode.position.z + speed * 1.0f);
+    if (nodeCount == allNodeArray.count)
+    {
+        for(NSArray *array in allNodeArray)
+        {
+            for(SCNNode *node in array)
+            {
+                node.hidden = YES;
+                [node removeFromParentNode];
+            }
+        }
+        [frameUpateTimer invalidate];
+        [oscTransmitTimer invalidate];
+        nodeCount = 0;
+        return;
+    }
+    
+    if(nodeCount >= nodeArrayCount - 50)
+    {
+        // 最后50个减速
+        if(fullSpeedMode)
+            fullSpeedMode = NO;
+    }
+    
+    NSLog(@"fps?:%ld",(long)fps);
+    if(fps % 60 == 0)
+    {
+        if(speed < 1.0f && fullSpeedMode)
+            speed = speed + 0.05;
+        
+        if(speed > 0.0f && !fullSpeedMode)
+            speed = speed - 0.05;
+    }
+    fps++;
+    if(speed >= 1.0f)
+    {
+        // 匀速状态
+        geometryNode.position = SCNVector3Make(geometryNode.position.x,geometryNode.position.y,geometryNode.position.z + speed * 1.15f);
+    }
+    else
+    {
+       geometryNode.position = SCNVector3Make(geometryNode.position.x,geometryNode.position.y,geometryNode.position.z + speed * 1.0f);
+    }
+    
+    if(floorf(fps/40) >= 1.0f/speed)
+    {
+        NSLog(@"nodeCount :%d",nodeCount);
+        NSMutableArray *nodeArray = [allNodeArray objectAtIndex:nodeCount];
+        for (SCNNode * node in nodeArray)
+        {
+            SCNVector3 SCNPosition = node.position;
+            if(SCNPosition.y >= 0)
+            {
+                continue;
+            }
+            
+            node.hidden = NO;
+            
+            [CATransaction begin];
+            CABasicAnimation *positionAnimation = [CABasicAnimation animationWithKeyPath:@"position.y"];
+            positionAnimation.toValue = [NSNumber numberWithDouble:2.0f];
+            positionAnimation.duration = 1.0;
+            positionAnimation.removedOnCompletion = NO;
+            positionAnimation.autoreverses = NO;
+            positionAnimation.repeatCount = 1;
+            positionAnimation.fillMode = kCAFillModeForwards;
+            [CATransaction setCompletionBlock:^
+             {
+//                 node.position = SCNVector3Make(SCNPosition.x, 2.0f, SCNPosition.z);
+                 // 可以把之前的node移除掉一些
+                 //node.position = NewSCNPosition;
+             }];
+            [node addAnimation:positionAnimation forKey:@"position.z"];
+            [CATransaction commit];
+        }
+        nodeCount ++;
+        fps = 0;
+    }
     
 }
 
@@ -263,8 +344,7 @@
 {
     if (nodeCount == allNodeArray.count)
     {
-        [oscTransmitTimer invalidate];
-        nodeCount = 0;
+        return;
     }
     else
     {
@@ -286,16 +366,6 @@
                 minHeight = height;
         }
         
-        if(nodeCount < allNodeArray.count - 50 && speed <= 1.0f)
-        {
-            speed = speed + 0.0005 * nodeCount;
-        }
-        
-        if(nodeCount >= allNodeArray.count - 50 && speed >= 0.0f)
-        {
-            speed = speed - 0.0005 * (allNodeArray.count - nodeCount);
-        }
-        
         NSInteger area_id = areaId;
         if(!hasReturnZero)
         {
@@ -308,51 +378,6 @@
     }
 }
 
-- (void)buildingLevelUp
-{
-    if (nodeCount == allNodeArray.count)
-    {
-        for(NSArray *array in allNodeArray)
-        {
-            for(SCNNode *node in array)
-            {
-                [node removeFromParentNode];
-            }
-        }
-        [timer invalidate];
-        [frameUpateTimer invalidate];
-        nodeCount = 0;
-    }else
-    {
-        NSMutableArray *nodeArray = [allNodeArray objectAtIndex:nodeCount];
-        for (SCNNode * node in nodeArray)
-        {
-            SCNVector3 SCNPosition = node.position;
-            if(SCNPosition.y >= 0)
-            {
-                continue;
-            }
-            
-            node.hidden = NO;
-            
-            [CATransaction begin];
-            CABasicAnimation *positionAnimation = [CABasicAnimation animationWithKeyPath:@"position.y"];
-            positionAnimation.toValue = [NSNumber numberWithDouble:2.0f];
-            positionAnimation.duration = 1.0;
-            positionAnimation.removedOnCompletion = NO;
-            positionAnimation.autoreverses = NO;
-            positionAnimation.repeatCount = 1;
-            positionAnimation.fillMode = kCAFillModeForwards;
-            [CATransaction setCompletionBlock:^
-             {
-                 //node.position = NewSCNPosition;
-             }];
-            [node addAnimation:positionAnimation forKey:@"position.z"];
-            [CATransaction commit];
-        }
-        nodeCount ++;
-    }
-}
 
 - (UIImage *) imageWithView:(UIView *)view
 {
