@@ -358,6 +358,15 @@
                  [geometryNode addChildNode:treeNode];
                  [nodeArray addObject:treeNode];
                  
+                 if (nodeCount >= 5)
+                 {
+                     NSMutableArray *nodeArray = [allNodeArray objectAtIndex:(nodeCount - 5)];
+                     for(SCNNode *node in nodeArray)
+                     {
+                         [node removeAllAnimations];
+                         [node removeFromParentNode];
+                     }
+                 }
                  
              }];
             [node addAnimation:positionAnimation forKey:@"geometry.height"];
