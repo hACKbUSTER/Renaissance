@@ -139,6 +139,7 @@
             boxNode.position = SCNVector3Make(nextX, 0.0f, -i*50);
             [geometryNode addChildNode:boxNode];
             [nodeArray addObject:boxNode];
+            
         }
         [allNodeArray addObject:nodeArray];
     }
@@ -342,6 +343,22 @@
 //                 node.position = SCNVector3Make(SCNPosition.x, 2.0f, SCNPosition.z);
                  // 可以把之前的node移除掉一些
                  //node.position = NewSCNPosition;
+                 
+                 
+                 SCNCylinder *sceneKitTreeCylinder = [SCNCylinder cylinderWithRadius:4 height:8];
+                 SCNNode *treeCylinderNode = [SCNNode nodeWithGeometry:sceneKitTreeCylinder];
+                 SCNCone *sceneKitTreeCone = [SCNCone coneWithTopRadius:0.1 bottomRadius:8 height:20];
+                 SCNNode *treeConeNode = [SCNNode nodeWithGeometry:sceneKitTreeCone];
+                 SCNNode *treeNode = [SCNNode node];
+                 [treeNode addChildNode:treeCylinderNode];
+                 treeCylinderNode.position = SCNVector3Make(0, 0, 0);
+                 treeConeNode.position = SCNVector3Make(0, 13, 0);
+                 [treeNode addChildNode:treeConeNode];
+                 treeNode.position = SCNVector3Make(-50.0f + arc4random()%100, 0.0f, -nodeCount*50);
+                 [geometryNode addChildNode:treeNode];
+                 [nodeArray addObject:treeNode];
+                 
+                 
              }];
             [node addAnimation:positionAnimation forKey:@"geometry.height"];
             [CATransaction commit];
