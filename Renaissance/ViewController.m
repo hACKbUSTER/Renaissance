@@ -112,6 +112,7 @@
 
 - (void)sunSystem
 {
+    NSLog(@"sunSystem SHOULD RUN ONLY  ONCE");
     sunSphereOuter = [SCNSphere sphereWithRadius:300];
     sunSphereOuter.segmentCount = 1;
     sunSphereOuterNode = [SCNNode nodeWithGeometry:sunSphereOuter];
@@ -122,7 +123,7 @@
     sunSphereOuterNode.position = SCNVector3Make(0, 1000, -1500);
     
     [sceneKitScene.rootNode addChildNode:sunSphereOuterNode];
-    //[self sunExpandAnimation];
+    [self sunExpandAnimation];
     
 }
 
@@ -137,12 +138,14 @@
 {
     NSLog(@"addSunSphereSegment");
     sunSphereOuter.segmentCount = sunSphereOuter.segmentCount + 1;
-    sunSphereOuterNode.geometry = sunSphereOuter;
+    //sunSphereOuterNode.eulerAngles = SCNVector3Make(sunSphereOuterNode.eulerAngles.x, sunSphereOuterNode.eulerAngles.y+ radians(20), sunSphereOuterNode.eulerAngles.z);
+    //sunSphereOuterNode.geometry = sunSphereOuter;
     if (sunSphereOuter.segmentCount >= 20)
     {
         [sunExpandAnimationTimer invalidate];
     }
 }
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -205,6 +208,7 @@
             boxNode.position = SCNVector3Make(nextX, -sceneKitBox.height - 10.0f, -(i + 3)*50);
             [geometryNode addChildNode:boxNode];
             [nodeArray addObject:boxNode];
+            
         }
         [allNodeArray addObject:nodeArray];
     }
@@ -444,6 +448,14 @@
         fps = 0;
     }
     
+    
+    if (weather == WeatherWindy)
+    {
+        SCNBox *cloudBox = [SCNBox boxWithWidth:20 height:2 length:20 chamferRadius:0];
+        SCNNode *cloudBoxNode = [SCNNode nodeWithGeometry:cloudBox];
+        cloudBoxNode.position = SCNVector3Make(arc4random()%300, 200 + arc4random()%100, -(nodeCount + 3)*50);
+        [geometryNode addChildNode:cloudBoxNode];
+    }
 }
 
 - (void)tapEvent:(id)sender
