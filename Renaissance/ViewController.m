@@ -82,6 +82,7 @@
 @property (nonatomic) BOOL isSunAnimating;
 
 @property (nonatomic,strong)NSMutableArray *cloudArray;
+@property (nonatomic,strong)NSMutableArray *starArray;
 @end
 
 @implementation ViewController
@@ -89,7 +90,7 @@
 @synthesize allNodeArray,nodeCount;
 @synthesize rainNode,rainParticle;
 @synthesize sunSphereOuter,sunExpandAnimationTimer,sunSphereOuterNode,isSunAnimating;
-@synthesize cloudArray;
+@synthesize cloudArray,starArray;
 
 - (void)rainParticleSystem
 {
@@ -523,6 +524,22 @@
         
     }
     
+    if (timeInDay == TimeNight)
+    {
+        if (arc4random()%10 == 1)
+        {
+            SCNCone *starCone = [SCNCone coneWithTopRadius:1 bottomRadius:3 height:2];
+            SCNNode *star = [SCNNode nodeWithGeometry:starCone];
+            star.position = SCNVector3Make(-300.0 + arc4random()%600, 200.0+arc4random()%60, -(nodeCount + 8)*50);
+            SCNMaterial *starMaterial = [SCNMaterial material];
+            starMaterial.transparency = 0.0;
+            starMaterial.transparencyMode = SCNTransparencyModeAOne;
+            starCone.radialSegmentCount = 3;
+            [geometryNode addChildNode:star];
+            [starArray addObject:star];
+        }
+    }
+    
     if (weather != WeatherWindy)
     {
         if(cloudArray.count > 0)
@@ -534,10 +551,24 @@
             [cloudArray removeAllObjects];
         }
     }
+    
+    if (timeInDay != TimeNight)
+    {
+        if(starArray.count > 0)
+        {
+            for (SCNNode* star in starArray)
+            {
+                [star removeFromParentNode];
+            }
+            [starArray removeAllObjects];
+        }
+    }
+
 }
 
-- (void)nightAnimation
+- (void)nightAnimationBegin
 {
+    
     
 }
 
