@@ -129,7 +129,7 @@
     sunBlankMaterial.doubleSided = YES;
     sunBlankMaterial.transparencyMode = SCNTransparencyModeAOne;
     sunSphereOuter.materials = @[sunBlankMaterial];
-    sunSphereOuterNode.position = SCNVector3Make(0, 700, -3000);
+    sunSphereOuterNode.position = SCNVector3Make(0.0, 700.0, -3000.0);
     
     [sceneKitScene.rootNode addChildNode:sunSphereOuterNode];
     //[self sunExpandAnimation];
@@ -225,8 +225,8 @@
     
     cameraNode = [SCNNode node];
     cameraNode.camera = [SCNCamera camera];
-    cameraNode.position = SCNVector3Make(0, 150, 150);
-    cameraNode.eulerAngles = SCNVector3Make(radians(-30.0), 0, 0);
+    cameraNode.position = SCNVector3Make(0.0, 150.0, 150.0);
+    cameraNode.eulerAngles = SCNVector3Make(radians(-30.0), 0.0, 0.0);
     
     [sceneKitView.scene.rootNode addChildNode:cameraNode];
     [sceneKitView setPointOfView:cameraNode];

@@ -57,7 +57,7 @@
     introScene = [SCNScene scene];
     self.backgroundView.scene = introScene;
     
-    sunSphere = [SCNSphere sphereWithRadius:1000];
+    sunSphere = [SCNSphere sphereWithRadius:1000.0];
     sunSphere.segmentCount = 1;
     sunSphereNode = [SCNNode nodeWithGeometry:sunSphere];
     SCNMaterial *sunBlankMaterial = [SCNMaterial material];
@@ -65,15 +65,15 @@
     sunBlankMaterial.doubleSided = YES;
     sunBlankMaterial.transparencyMode = SCNTransparencyModeAOne;
     sunSphere.materials = @[sunBlankMaterial];
-    sunSphereNode.position = SCNVector3Make(0, 1200, -2500);
+    sunSphereNode.position = SCNVector3Make(0.0, 1200.0, -2500.0);
     self.sunAnimationTimer = [NSTimer scheduledTimerWithTimeInterval:0.4 target:self selector:@selector(SunSphereSegment) userInfo:nil repeats:YES];
     self.isSunAnimationTimer = YES;
     [introScene.rootNode addChildNode:sunSphereNode];
     
     cameraNode = [SCNNode node];
     cameraNode.camera = [SCNCamera camera];
-    cameraNode.position = SCNVector3Make(0, 150, 150);
-    cameraNode.eulerAngles = SCNVector3Make(0, 0, 0);
+    cameraNode.position = SCNVector3Make(0.0, 150.0, 150.0);
+    cameraNode.eulerAngles = SCNVector3Make(0.0, 0.0, 0.0);
     
     [introScene.rootNode addChildNode:cameraNode];
     [backgroundView setPointOfView:cameraNode];
@@ -93,7 +93,7 @@
     periscopeTextNodeMaterial.doubleSided = YES;
     periscopeText.materials = @[periscopeTextNodeMaterial];
     periscopeTextNode.geometry = periscopeText;
-    periscopeTextNode.position = SCNVector3Make(-1250, -500, -2500);
+    periscopeTextNode.position = SCNVector3Make(-1250., -500.0, -2500.0);
     //periscopeTextNode.scale = SCNVector3Make(1, 1, 1);
     //[introScene.rootNode addChildNode:periscopeTextNode];
     
