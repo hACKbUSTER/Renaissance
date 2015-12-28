@@ -1,9 +1,8 @@
 # Periscope (潜望镜)
-Project Renaissance
-Art Hackathon 2015
-此项目为在“纪元：中国文艺黑客马拉松（1）落地松 新作一個杭州人” [网络地址](http://caa-ins.org/index.php?title=Loadingthon) 中实现的作品 为中国美术学院所赞助
-
-
+Project Renaissance  
+Art Hackathon 2015    
+此项目为在“**纪元：中国文艺黑客马拉松（1）落地松 新作一個杭州人**” [网络地址](http://caa-ins.org/index.php?title=Loadingthon) 中实现的作品  
+为中国美术学院所赞助
 
 此文档首先定义了客户端数据和生成音乐的服务端进行数据传输的格式协议。
 
