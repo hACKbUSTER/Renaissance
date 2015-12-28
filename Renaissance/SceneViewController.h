@@ -8,10 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-double radians(float degrees) {
-    return ( degrees * 3.14159265 ) / 180.0;
-}
-
 typedef NS_ENUM(NSInteger, TimeInDay) {
     TimeMorning = 1,
     TimeNoon = 2,
@@ -30,7 +26,10 @@ typedef NS_ENUM(NSInteger, WeatherId) {
     WeatherWindy = 3,
 };
 
-@interface ViewController : UIViewController
+@interface SceneViewController : UIViewController
+
+@property (nonatomic,strong) NSString *address;
+@property (nonatomic,strong) NSString *port;
 
 @end
 

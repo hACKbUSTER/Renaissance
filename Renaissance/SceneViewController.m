@@ -6,14 +6,15 @@
 //  Copyright © 2015年 叔 陈. All rights reserved.
 //
 #define CC_RADIANS_TO_DEGREES(__ANGLE__) ((__ANGLE__) * 57.29577951f)
+#define radians(__ANGLE__) ( (__ANGLE__) * 3.14159265 ) / 180.0
 
-#import "ViewController.h"
+#import "SceneViewController.h"
 #import "OSCManager.h"
 #include <CoreMotion/CoreMotion.h>
 
 @import SceneKit;
 
-@interface ViewController ()
+@interface SceneViewController ()
 {
     /**
      *  相机node
@@ -85,12 +86,13 @@
 @property (nonatomic,strong)NSMutableArray *starArray;
 @end
 
-@implementation ViewController
+@implementation SceneViewController
 @synthesize sceneKitView,sceneKitScene;
 @synthesize allNodeArray,nodeCount;
 @synthesize rainNode,rainParticle;
 @synthesize sunSphereOuter,sunExpandAnimationTimer,sunSphereOuterNode,isSunAnimating;
 @synthesize cloudArray,starArray;
+@synthesize address,port;
 
 - (void)rainParticleSystem
 {
@@ -204,8 +206,8 @@
     fullSpeedMode = YES;
     hasReturnZero = NO;
     
-    [[OSCManager sharedInstance] setAddress:@"169.254.172.171"];
-    [[OSCManager sharedInstance] setPort:7400];
+    [[OSCManager sharedInstance] setAddress:address];
+    [[OSCManager sharedInstance] setPort:[port intValue]];
     [[OSCManager sharedInstance] connect];
     
     geometryNode = [SCNNode node];
