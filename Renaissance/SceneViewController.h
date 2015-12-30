@@ -30,6 +30,7 @@ typedef NS_ENUM(NSInteger, WeatherId) {
 
 @property (nonatomic,strong) NSString *address;
 @property (nonatomic,strong) NSString *port;
+@property (nonatomic) AreaId setedAreaID;
 
 @end
 

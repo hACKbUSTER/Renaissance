@@ -27,11 +27,12 @@
 @property (strong,nonatomic) UIView * textFieldView;
 
 @property (strong,nonatomic) UIButton *loginButton;
+@property (strong,nonatomic) UIButton *areaSwitch;
 
 @end
 
 @implementation IntroViewController
-@synthesize backgroundView,loginButton;
+@synthesize backgroundView,loginButton,areaSwitch;
 @synthesize introScene,cameraNode;
 @synthesize sunSphere,sunSphereNode;
 
@@ -172,6 +173,34 @@
     [self.textFieldView addSubview:loginButton];
     [loginButton addTarget:self action:@selector(login) forControlEvents:UIControlEventTouchUpInside];
     
+    
+    UILabel *siwtchLabel = [[UILabel alloc] initWithFrame:CGRectMake(40, 130, 60, 30)];
+    //IPLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14];
+    siwtchLabel.textColor = [UIColor whiteColor];
+    siwtchLabel.text = @"Area : ";
+    siwtchLabel.textAlignment = NSTextAlignmentLeft;
+    
+    areaSwitch = [[UIButton alloc] initWithFrame:CGRectMake(100, 130, 200, 30)];
+    [areaSwitch setTitle:@"AreaTrainStation" forState:UIControlStateNormal];
+    [areaSwitch setTitleColor:[UIColor colorWithWhite:1.0 alpha:0.5] forState:UIControlStateNormal];
+    areaSwitch.titleLabel.textAlignment = NSTextAlignmentCenter;
+    [areaSwitch addTarget:self action:@selector(changeArea) forControlEvents:UIControlEventTouchUpInside];
+    [self.textFieldView addSubview:areaSwitch];
+    [self.textFieldView addSubview:siwtchLabel];
+    
+}
+
+- (void)changeArea
+{
+    if ([areaSwitch.titleLabel.text isEqualToString:@"AreaTrainStation"])
+    {
+        NSLog(@"AreaTrainStation");
+        [areaSwitch setTitle:@"AreaCity" forState:UIControlStateNormal];
+    }else if ([areaSwitch.titleLabel.text isEqualToString:@"AreaCity"])
+    {
+        NSLog(@"AreaCity");
+        [areaSwitch setTitle:@"AreaTrainStation" forState:UIControlStateNormal];
+    }
 }
 
 - (void)login
@@ -179,6 +208,14 @@
     SceneViewController *VC = [[SceneViewController alloc] init];
     VC.address = self.IPTextField.text;
     VC.port = self.PortTextField.text;
+    if ([areaSwitch.titleLabel.text isEqualToString:@"AreaTrainStation"])
+    {
+        VC.setedAreaID = AreaTrainStation;
+    }
+    else if ([areaSwitch.titleLabel.text isEqualToString:@"AreaCity"])
+    {
+        VC.setedAreaID = AreaCity;
+    }
     [self presentViewController:VC animated:YES completion:^(void){}];
 }
 

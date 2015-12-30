@@ -92,7 +92,7 @@
 @synthesize rainNode,rainParticle;
 @synthesize sunSphereOuter,sunExpandAnimationTimer,sunSphereOuterNode,isSunAnimating;
 @synthesize cloudArray,starArray;
-@synthesize address,port;
+@synthesize address,port,setedAreaID;
 
 - (void)rainParticleSystem
 {
@@ -197,8 +197,8 @@
     cloudArray = [[NSMutableArray alloc] init];
     
     speed = 0.2f;
-    areaId = AreaCity;
-    //areaId = AreaTrainStation;//AreaCity;
+    //areaId = AreaCity;
+    areaId = setedAreaID;//AreaCity;
     nodeArrayCount = 120;
     buildingMaxHeight = 200;
     timeInDay = TimeMorning;
@@ -414,6 +414,7 @@
         [frameUpateTimer invalidate];
         [oscTransmitTimer invalidate];
         nodeCount = 0;
+        [self dismissViewControllerAnimated:YES completion:^(void){}];
         return;
     }
     
