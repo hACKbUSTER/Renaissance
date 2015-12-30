@@ -138,7 +138,8 @@
     self.IPTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"eg: 192.168.0.2" attributes:@{NSForegroundColorAttributeName: whiteColor}];
     self.IPTextField.textAlignment = NSTextAlignmentCenter;
     self.IPTextField.textColor = [UIColor whiteColor];
-    self.IPTextField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
+    self.IPTextField.keyboardType = UIKeyboardTypeDecimalPad;
+    self.IPTextField.keyboardAppearance = UIKeyboardAppearanceDark;
     
     UILabel *portLabel = [[UILabel alloc] initWithFrame:CGRectMake(40, 100, 60, 30)];
     //IPLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14];
@@ -149,6 +150,7 @@
     self.PortTextField = [[UITextField alloc] initWithFrame:CGRectMake(100, 100, 200, 30)];
     self.PortTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"eg: 6400" attributes:@{NSForegroundColorAttributeName: whiteColor}];
     self.PortTextField.keyboardType = UIKeyboardTypeNumberPad;
+    self.PortTextField.keyboardAppearance = UIKeyboardAppearanceDark;
     self.PortTextField.textAlignment = NSTextAlignmentCenter;
     self.PortTextField.textColor = [UIColor whiteColor];
     

@@ -197,7 +197,8 @@
     cloudArray = [[NSMutableArray alloc] init];
     
     speed = 0.2f;
-    areaId = AreaTrainStation;//AreaCity;
+    areaId = AreaCity;
+    //areaId = AreaTrainStation;//AreaCity;
     nodeArrayCount = 120;
     buildingMaxHeight = 200;
     timeInDay = TimeMorning;
